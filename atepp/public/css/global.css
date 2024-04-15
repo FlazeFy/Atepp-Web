@@ -1,0 +1,127 @@
+
+:root {   
+    /* Typography */
+    --textXJumbo : 24px;
+    --textJumbo : 20px;
+    --textXLG : 18px;
+    --textLG : 16px;
+    --textXMD : 14px;
+    --textMD : 13px;
+    --textSM : 12px;
+    --textXSM : 11px;
+
+    /* Rounded */
+    --roundedCircle : 100%;
+    --roundedJumbo : 30px;
+    --roundedXLG : 24px;
+    --roundedLG : 18px;
+    --roundedMD : 14px;
+    --roundedSM : 12px;
+    --roundedMini : 6px;
+
+    /* Spacing */
+    --spaceJumbo : 35px;
+    --spaceXLG : 24px;
+    --spaceLG : 20px;
+    --spaceXMD : 16px;
+    --spaceMD : 12px;
+    --spaceSM : 10px;
+    --spaceXSM : 8px;
+    --spaceXXSM : 6px;
+    --spaceMini : 4px;
+
+    /* Table column min width */
+    --tcolMinXSM : 60px;
+    --tcolMinSM : 120px;
+    --tcolMinMD : 140px;
+    --tcolMinLG : 180px;
+    --tcolMinJumbo : 240px;
+    --tcolMinHuge : 360px;
+
+    /* Color Pallete */
+    --successBG : #00A35D;
+    --dangerBG : #F02273;
+    --warningBG : #e8ae00;
+    --infoBG : #5065D9;
+    --hoverBG : #F2F2F2;
+
+    --primaryColor : #F43B41;
+    --darkColor : #121725;
+    --whiteColor : #FFFFFF;
+    --greyColor : #838181;
+    --shadowColor : #E0E0E0;
+}
+
+a, p, b, i, h1, h2, h3, h4, h5, h6, label, input, select, textarea {
+    color: var(--whiteColor) !important;
+}
+
+section {
+    max-width: 1080px;
+    display: block;
+    margin-inline: auto;
+    min-height: 100vh;
+    padding-top: var(--spaceMD);
+}
+
+nav {
+    z-index: 999;
+    position: sticky !important;
+    top: 0 !important;
+    padding-inline: var(--spaceMD);
+    background: transparent;
+}
+.nav-link {
+    font-weight: 600;
+    margin-right: var(--spaceSM);
+    border: calc(var(--spaceMini) / 2) solid transparent;
+    font-size: var(--textXLG);
+}
+.nav-link.active {
+    background: var(--darkColor);
+    border: calc(var(--spaceMini) / 2) solid var(--dangerBG) !important;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.nav-link:hover {
+    border: calc(var(--spaceMini) / 1.5) solid var(--whiteColor);
+}
+.navbar-brand {
+    font-size: var(--textXJumbo) !important;
+}
+
+input {
+    background: transparent !important;
+}
+
+.dropdown-menu {
+    background: var(--darkColor);
+    border: calc(var(--spaceMini) / 2) solid var(--dangerBG);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    margin-top: var(--spaceMD) !important;
+}
+.dropdown-item {
+    padding: var(--spaceSM);
+}
+.dropdown-item:hover {
+    background: transparent;
+    border-left: calc(var(--spaceMini) / 1.25) solid var(--whiteColor);
+}
+
+.nav-link, .dropdown-item, button, a {
+    -webkit-transition: all 0.35s;
+    -o-transition: all 0.35s;
+    transition: all 0.35s;
+}
+
+.user-category {
+    font-size: var(--textXMD);
+    border-radius: var(--roundedLG);
+    padding: var(--spaceMini) var(--spaceSM);
+    margin-inline: var(--spaceMini);
+}
+.user-category.enterprise {
+    background: var(--warningBG);
+}
+.user-category.community {
+    background: var(--infoBG);
+}
