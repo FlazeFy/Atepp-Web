@@ -11,4 +11,5 @@ Route::prefix('/dashboard')->group(function () {
 
 Route::prefix('/project')->group(function () {
     Route::get('/', [ProjectController::class, 'index'])->name('project');
+    Route::post('/select_project', [ProjectController::class, 'set_open_project']);
 });

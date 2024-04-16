@@ -14,4 +14,10 @@ class ProjectController extends Controller
         return view('project.index')
             ->with('active_page','project');
     }
+
+    public function set_open_project(Request $request){
+        $request->session()->put('project_key', $request->project_slug);
+
+        return redirect()->back();
+    }
 }
