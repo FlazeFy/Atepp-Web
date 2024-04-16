@@ -7,6 +7,30 @@
         border: calc(var(--spaceMini) / 2) solid var(--dangerBG);
         border-radius: 0;
     }
+    .autocomplete {
+        position: relative;
+        display: inline-block;
+    }
+    .autocomplete-items {
+        position: absolute;
+        border: 0;
+        z-index: 99;
+        top: 100%;
+        left: 0;
+        right: 0;
+        max-width: 800px;
+    }
+    .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        color: var(--whiteColor);
+        background: var(--darkColor) !important;
+        border-bottom: 1px solid #d4d4d4;
+        height: 80px !important;
+    }
+    .autocomplete-items div:hover, .autocomplete-active {
+        background: var(--dangerBG) !important;
+    }
 </style>
 
 <div class="d-flex justify-content-start me-4">
@@ -19,7 +43,7 @@
         <option value="HEAD">HEAD</option>
         <option value="OPTIONS">OPTIONS</option>
     </select>
-    <input type="text" class="form-control py-3" id="endpoint_holder" style="border: calc(var(--spaceMini) / 2) solid var(--dangerBG) !important;" aria-label="Text input with 2 dropdown buttons">
+    <input type="text" class="form-control py-3" id="endpoint_holder" placeholder="Search by url..." style="border: calc(var(--spaceMini) / 2) solid var(--dangerBG) !important;" aria-label="Text input with 2 dropdown buttons">
     <select class="form-select select-group" onchange="run_endpoint(this.value)" aria-label="Default select example" style="width:300px;">
         <option>-</option>
         <option value="send"><i class="fa-solid fa-floppy-disk"></i> Send</option>
@@ -81,8 +105,111 @@
                 response_box.appendChild(pre)
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
-                
+                // Do someting
             }
         })
     }
+
+    var endpoint = [];
+
+    get_list_endpoint()
+    function get_list_endpoint() {
+        $.ajax({
+                url: "http://127.0.0.1:8000/api/v1/project/endpoint/list",
+                datatype: "json",
+                type: "get",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Accept", "application/json");
+                }
+            })
+            .done(function (response) {
+                let data =  response.data;
+
+                for(var i = 0; i < data.length; i++){
+                    endpoint.push({
+                        endpoint_url: data[i].endpoint_url,
+                        endpoint_name: data[i].endpoint_name,
+                        endpoint_method: data[i].endpoint_method
+                    })
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                // Do someting
+            });
+        
+    }
+    
+    autocomplete(document.getElementById("endpoint_holder"), endpoint);
+    function autocomplete(inp, arr) {
+        var currentFocus
+
+        inp.addEventListener("input", function(e) {
+            var a, b, i, val = this.value
+            closeAllLists()
+            if (!val) { return false }
+            currentFocus = -1
+            a = document.createElement("DIV")
+            a.setAttribute("id", this.id + "autocomplete-list")
+            a.setAttribute("class", "autocomplete-items")
+            this.parentNode.appendChild(a)
+            for (i = 0; i < arr.length; i++) {
+                if (arr[i].endpoint_url.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    b = document.createElement("DIV")
+                    b.innerHTML = `<strong>${arr[i].endpoint_url.substr(0, val.length)}</strong><span class='position-absolute' style='bottom:15px; left: 10px;'><span class='bg-warning px-3 py-1 me-2 rounded-pill'>${arr[i].endpoint_method}</span><span class='bg-success px-3 py-1 rounded-pill'>${arr[i].endpoint_name}</span></span>`
+                    b.innerHTML += arr[i].endpoint_url.substr(val.length)
+                    b.innerHTML += `<input type='hidden' value='${arr[i].endpoint_url}'>`
+                    b.addEventListener("click", function(e) {
+                        inp.value = this.getElementsByTagName("input")[0].value
+                        closeAllLists()
+                    })
+                    a.appendChild(b)
+                }
+            }
+        })
+
+        inp.addEventListener("keydown", function(e) {
+            var x = document.getElementById(this.id + "autocomplete-list")
+            if (x) x = x.getElementsByTagName("div")
+            if (e.keyCode == 40) {
+                currentFocus++
+                addActive(x)
+            } else if (e.keyCode == 38) {
+                currentFocus--
+                addActive(x)
+            } else if (e.keyCode == 13) {
+                e.preventDefault()
+                if (currentFocus > -1) {
+                    if (x) x[currentFocus].click()
+                }
+            }
+        })
+
+        function addActive(x) {
+            if (!x) return false
+            removeActive(x)
+            if (currentFocus >= x.length) currentFocus = 0
+            if (currentFocus < 0) currentFocus = (x.length - 1)
+            x[currentFocus].classList.add("autocomplete-active")
+        }
+
+        function removeActive(x) {
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active")
+            }
+        }
+
+        function closeAllLists(elmnt) {
+            var x = document.getElementsByClassName("autocomplete-items")
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i])
+                }
+            }
+        }
+
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target)
+        })
+    }
+
 </script>
