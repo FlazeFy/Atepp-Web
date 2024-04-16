@@ -7,19 +7,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">/Dashboard</a>
+                    <a class="nav-link <?php if($active_page == 'dashboard'){ echo"active"; }?>" aria-current="page" href="/dashboard"><?php if($active_page == 'dashboard'){ echo"/"; }?>Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/project">Project</a>
+                    <a class="nav-link <?php if($active_page == 'project'){ echo"active"; }?>" aria-current="page" href="/project"><?php if($active_page == 'project'){ echo"/"; }?>Project</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/workingspace">WorkingSpace</a>
+                    <a class="nav-link <?php if($active_page == 'workingspace'){ echo"active"; }?>" aria-current="page" href="/workingspace"><?php if($active_page == 'workingspace'){ echo"/"; }?>WorkingSpace</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/dummy">Dummy</a>
+                    <a class="nav-link <?php if($active_page == 'dummy'){ echo"active"; }?>" aria-current="page" href="/dummy"><?php if($active_page == 'dummy'){ echo"/"; }?>Dummy</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/global">Global</a>
+                    <a class="nav-link <?php if($active_page == 'global'){ echo"active"; }?>" aria-current="page" href="/global"><?php if($active_page == 'global'){ echo"/"; }?>Global</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

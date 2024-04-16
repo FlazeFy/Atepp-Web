@@ -91,6 +91,13 @@ nav {
 
 input {
     background: transparent !important;
+    font-size: var(--textXLG) !important;
+}
+
+.btn-primary {
+    background: var(--darkColor) !important;
+    border: calc(var(--spaceMini) / 2) solid var(--dangerBG) !important;
+    border-radius: 0;
 }
 
 .dropdown-menu {
@@ -111,6 +118,17 @@ input {
     -webkit-transition: all 0.35s;
     -o-transition: all 0.35s;
     transition: all 0.35s;
+}
+.nav-link.tabs {
+    border: calc(var(--spaceMini) / 2) solid var(--greyColor);
+    margin-right: 0;
+    cursor: pointer !important;
+}
+.nav-link.tabs:hover {
+    background: var(--darkColor);
+}
+.container {
+    border: calc(var(--spaceMini) / 2) solid var(--greyColor);
 }
 
 .user-category {
