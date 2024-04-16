@@ -58,13 +58,38 @@
                                 <span>${data[i].folder_name}</span><i class="fa-solid fa-square-caret-down"></i>
                             </div>
                         </a>
-                        <div class="collapse multi-collapse bg-transparent" id="collapse_${data[i].folder_slug}">
-                            <div class="pt-2">
-                                Some placeholder content for the first collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
-                            </div>
+                        <div class="collapse multi-collapse bg-transparent ${i == 0 ? 'show' : ''}" id="collapse_${data[i].folder_slug}">
+                            <div class="pt-2" id="${data[i].folder_slug}_endpoint_holder"></div>
                         </div>
-                        
                         `
+                    )
+                    get_endpoint_by_folder(data[i].folder_slug)
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                // Do someting
+            });
+        
+    }
+
+    function get_endpoint_by_folder(slug) {
+        $.ajax({
+                url: `http://127.0.0.1:8000/api/v1/project/endpoint/folder/${slug}`,
+                datatype: "json",
+                type: "get",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Accept", "application/json");
+                }
+            })
+            .done(function (response) {
+                let data =  response.data;
+
+                for(var i = 0; i < data.length; i++){
+                    $(`#${slug}_endpoint_holder`).append(`
+                        <button class='btn-endpoint' onclick='open_endpoint_via_folder("${data[i].endpoint_url}", method)'>
+                            <span class='bg-success px-2 me-1 py-1 rounded-pill' onclick='' style='font-size: var(--textSM);'>${data[i].endpoint_method}
+                            </span>${data[i].endpoint_name}
+                        </button>`
                     )
                 }
             })
@@ -72,5 +97,10 @@
                 // Do someting
             });
         
+    }
+
+    function open_endpoint_via_folder(url, method){
+        document.getElementById('endpoint_holder').value = url
+        document.getElementById('method').value = method
     }
 </script>

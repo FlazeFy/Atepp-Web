@@ -114,7 +114,7 @@ input {
     border-left: calc(var(--spaceMini) / 1.25) solid var(--whiteColor);
 }
 
-.nav-link, .dropdown-item, button, a {
+.nav-link, .dropdown-item, button, a, .btn-endpoint {
     -webkit-transition: all 0.35s;
     -o-transition: all 0.35s;
     transition: all 0.35s;
@@ -142,4 +142,20 @@ input {
 }
 .user-category.community {
     background: var(--infoBG);
+}
+
+.btn-endpoint {
+    background: var(--darkColor);
+    padding: var(--spaceSM) var(--spaceMD);
+    border-radius: var(--roundedLG);
+    margin-bottom: var(--spaceXSM);
+    cursor: pointer;
+    font-size: var(--textMD);
+    color: var(--whiteColor);
+    width: 100%;
+    text-align: start;
+}
+
+.btn-endpoint:hover {
+    transform: scale(1.05);
 }

@@ -27,4 +27,22 @@ class Queries extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function get_endpoint_by_folder_slug($id)
+    {
+        try{
+            $res = EndpointModel::get_endpoint_by_folder_slug($id);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'endpoint fetched',
+                'data' => $res
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -35,4 +35,14 @@ class EndpointModel extends Model
             return false;
         }
     }
+
+    public static function get_endpoint_by_folder_slug($slug){
+        $res = EndpointModel::select('endpoint.id','endpoint_name', 'endpoint_desc', 'endpoint_url', 'endpoint_method')
+            ->join('folder','folder.id','=','endpoint.folder_id')
+            ->where('folder_slug', $slug)
+            ->orderBy('endpoint_name', 'asc')
+            ->get();
+
+        return $res;
+    }
 }
