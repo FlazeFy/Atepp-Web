@@ -53,8 +53,9 @@
 </div>
 
 <script>
+    const method = document.getElementById('method').value
+
     function run_endpoint(type){
-        const method = document.getElementById('method').value
         const url = document.getElementById('endpoint_holder').value
 
         if(type == 'send'){
@@ -103,15 +104,45 @@
                 time_box.innerHTML = `<span class='${time_box_color} px-3 ms-2 py-1 rounded-pill'>${timeTaken.toFixed(2)} ms</span>`
                 
                 response_box.appendChild(pre)
+
+                // Save endpoint
+                check_endpoint_url(url)
+                .then(data => {
+                    if(!data){
+                        post_endpoint(method, url)
+                    } 
+                })
+                .catch(error => {
+                    alert('API error:', error);
+                })
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
                 // Do someting
             }
         })
     }
+    function check_endpoint_url(url){
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: 'http://127.0.0.1:8000/api/v1/project/endpoint/check',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ endpoint_url: url}), 
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response, textStatus, jqXHR) {
+                    resolve(response.data)
+                },
+                error: function(response, jqXHR, textStatus, errorThrown) {
+                    reject(errorThrown)
+                }
+            })
+        })
+    }
 
     var endpoint = [];
-
     get_list_endpoint()
     function get_list_endpoint() {
         $.ajax({
@@ -137,6 +168,30 @@
                 // Do someting
             });
         
+    }
+
+    function post_endpoint(method, url){
+        $.ajax({
+            url: 'http://127.0.0.1:8000/api/v1/project/endpoint',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({ 
+                endpoint_url: url,
+                endpoint_method: method,
+                endpoint_name: null,
+                endpoint_desc: null
+            }), 
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response, textStatus, jqXHR) {
+                get_list_endpoint()
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                // Do someting
+            }
+        })
     }
     
     autocomplete(document.getElementById("endpoint_holder"), endpoint);

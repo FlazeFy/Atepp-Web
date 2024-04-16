@@ -23,4 +23,16 @@ class EndpointModel extends Model
 
         return $res;
     }
+
+    public static function check_endpoint($url){
+        $res = EndpointModel::selectRaw('1')
+            ->where('endpoint_url', $url)
+            ->first();
+
+        if($res != null){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
