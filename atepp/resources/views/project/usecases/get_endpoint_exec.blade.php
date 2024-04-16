@@ -210,7 +210,11 @@
             for (i = 0; i < arr.length; i++) {
                 if (arr[i].endpoint_url.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
                     b = document.createElement("DIV")
-                    b.innerHTML = `<strong>${arr[i].endpoint_url.substr(0, val.length)}</strong><span class='position-absolute' style='bottom:15px; left: 10px;'><span class='bg-warning px-3 py-1 me-2 rounded-pill'>${arr[i].endpoint_method}</span><span class='bg-success px-3 py-1 rounded-pill'>${arr[i].endpoint_name}</span></span>`
+                    b.innerHTML = `<strong>${arr[i].endpoint_url.substr(0, val.length)}</strong>
+                        <span class='position-absolute' style='bottom:15px; left: 10px;'>
+                            <span class='bg-warning px-3 py-1 me-2 rounded-pill'>${arr[i].endpoint_method}</span>
+                            <span class='bg-success px-3 py-1 rounded-pill'>${arr[i].endpoint_name}</span>
+                        </span>`
                     b.innerHTML += arr[i].endpoint_url.substr(val.length)
                     b.innerHTML += `<input type='hidden' value='${arr[i].endpoint_url}'>`
                     b.addEventListener("click", function(e) {

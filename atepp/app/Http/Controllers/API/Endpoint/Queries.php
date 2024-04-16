@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Api\Project;
+namespace App\Http\Controllers\Api\Endpoint;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-use App\Models\ProjectModel;
+use App\Models\EndpointModel;
 
 class Queries extends Controller
 {
-    public function get_all_project() 
+    public function get_all_endpoint() 
     {
         try{
-            $res = ProjectModel::get_all_project();
+            $res = EndpointModel::get_all_endpoint();
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'project fetched',
+                'message' => 'endpoint fetched',
                 'data' => $res
             ], Response::HTTP_OK);
         } catch(\Exception $e) {
