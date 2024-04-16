@@ -3,8 +3,10 @@
         @csrf
         <select class="form-select select-group w-100 py-3" onchange="this.form.submit()" id="project" name="project_slug" aria-label="Default select example"></select>
     </form>
-    <h4 class="fw-bold mt-3">Folder</h4>
-
+    <div class="d-flex justify-content-between">
+        <h4 class="fw-bold mt-3">Folder</h4>
+        <button class="btn btn-primary" onclick="add_new_folder()"><i class="fa-solid fa-plus"></i></button>
+    </div>
     <div class="mt-2" id="folder_holder"></div>
 </div>
 
@@ -53,7 +55,7 @@
 
                 for(var i = 0; i < data.length; i++){
                     $('#folder_holder').append(
-                        ` <a class="btn btn-primary w-100 text-start" data-bs-toggle="collapse" href="#collapse_${data[i].folder_slug}" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">
+                        ` <a class="btn btn-primary w-100 text-start mb-2" data-bs-toggle="collapse" href="#collapse_${data[i].folder_slug}" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">
                             <div class="d-flex justify-content-between fw-bold">
                                 <span>${data[i].folder_name}</span><i class="fa-solid fa-square-caret-down"></i>
                             </div>
@@ -97,6 +99,34 @@
                 // Do someting
             });
         
+    }
+
+    function add_new_folder(slug){
+        $('#folder_holder').append(`<input class="form-control btn btn-primary text-start mb-3" onblur="post_folder(this.value,open_project)">`)
+    }
+
+    function post_folder(val,slug){
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/v1/project/folder/${slug}`,
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({ 
+                slug: slug,
+                folder_name: val,
+                folder_desc: null,
+                folder_pin_code: null
+            }), 
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response, textStatus, jqXHR) {
+                get_list_endpoint()
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                // Do someting
+            }
+        })
     }
 
     function open_endpoint_via_folder(url, method){
