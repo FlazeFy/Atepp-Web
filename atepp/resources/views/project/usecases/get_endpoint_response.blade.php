@@ -9,7 +9,6 @@
     <div class="row">
         <div class="col">
             <h1 class="fw-bold">Params</h1>
-            <h1 class="fw-bold">History</h1>
             @include('project.usecases.get_history')
         </div>
         <div class="col">

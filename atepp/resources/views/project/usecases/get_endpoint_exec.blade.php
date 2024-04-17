@@ -117,7 +117,7 @@
                     if(!data){
                         post_endpoint(method, url)
                     } 
-                    post_response_history(id, status, method, timeTaken, JSON.stringify(response), env)
+                    post_response_history(id, status, method, timeTaken, JSON.stringify(response, null, 4), env)
                 })
                 .catch(error => {
                     alert('API error:', error);

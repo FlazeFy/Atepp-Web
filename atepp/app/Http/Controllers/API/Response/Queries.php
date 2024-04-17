@@ -27,4 +27,24 @@ class Queries extends Controller
             ], Res::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function get_response_detail_by_id($id) 
+    {
+        try{
+            $res = ResponseModel::select('response_body')
+                ->where('id',$id)
+                ->first();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'response fetched',
+                'data' => $res
+            ], Res::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'something wrong. Please contact admin',
+            ], Res::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
