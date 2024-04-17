@@ -8,6 +8,7 @@
     let res_time_total = 0
 
     function get_list_history(id) {
+        res_time_total = 0
         $('#history_holder').empty()
         $.ajax({
                 url: `http://127.0.0.1:8000/api/v1/project/response/${id}`,

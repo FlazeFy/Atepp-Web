@@ -30,3 +30,7 @@ Route::prefix('/v1/project')->group(function () {
     Route::get('/response/{id}/body', [QueriesResponseApi::class, 'get_response_detail_by_id']);
     Route::post('/response', [CommandsResponseApi::class, 'post_response']);
 });
+
+Route::prefix('/v1/stats')->group(function () {
+    Route::get('/response/performance', [QueriesResponseApi::class, 'stats_general_response_time']);
+});
