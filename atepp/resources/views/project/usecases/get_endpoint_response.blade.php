@@ -9,6 +9,8 @@
     <div class="row">
         <div class="col">
             <h1 class="fw-bold">Params</h1>
+            <h1 class="fw-bold">History</h1>
+            @include('project.usecases.get_history')
         </div>
         <div class="col">
             <h1 class="fw-bold">Response <span id="response_status_code"></span> <span id="response_time"></span></h1>

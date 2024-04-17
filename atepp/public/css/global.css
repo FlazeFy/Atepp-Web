@@ -159,3 +159,12 @@ input {
 .btn-endpoint:hover {
     transform: scale(1.05);
 }
+hr {
+    color: var(--whiteColor) !important;
+    opacity: 1;
+}
+
+.btn-link {
+    cursor: pointer;
+    text-decoration: underline !important;
+}

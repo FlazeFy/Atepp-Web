@@ -5,7 +5,7 @@
     </form>
     <div class="d-flex justify-content-between">
         <h4 class="fw-bold mt-3">Folder</h4>
-        <button class="btn btn-primary" onclick="add_new_folder()"><i class="fa-solid fa-plus"></i></button>
+        <button class="btn btn-primary" onclick="add_new_folder()"><i class="fa-solid fa-folder-plus"></i></button>
     </div>
     <div class="mt-2" id="folder_holder"></div>
 </div>
@@ -88,7 +88,7 @@
 
                 for(var i = 0; i < data.length; i++){
                     $(`#${slug}_endpoint_holder`).append(`
-                        <button class='btn-endpoint' onclick='open_endpoint_via_folder("${data[i].endpoint_url}", method)'>
+                        <button class='btn-endpoint' onclick='open_endpoint_via_folder("${data[i].id}","${data[i].endpoint_url}", method)'>
                             <span class='bg-success px-2 me-1 py-1 rounded-pill' onclick='' style='font-size: var(--textSM);'>${data[i].endpoint_method}
                             </span>${data[i].endpoint_name}
                         </button>`
@@ -129,8 +129,10 @@
         })
     }
 
-    function open_endpoint_via_folder(url, method){
+    function open_endpoint_via_folder(id, url, method){
         document.getElementById('endpoint_holder').value = url
         document.getElementById('method').value = method
+
+        get_list_history(id)
     }
 </script>
