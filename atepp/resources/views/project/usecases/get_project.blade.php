@@ -132,6 +132,7 @@
     function open_endpoint_via_folder(id, url, method){
         document.getElementById('endpoint_holder').value = url
         document.getElementById('method').value = method
+        document.getElementById('endpoint_id').value = id
 
         get_list_history(id)
     }

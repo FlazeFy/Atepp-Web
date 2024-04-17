@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Folder\Queries as QueriesFolderApi;
 use App\Http\Controllers\Api\Folder\Commands as CommandsFolderApi;
 
 use App\Http\Controllers\Api\Response\Queries as QueriesResponseApi;
+use App\Http\Controllers\Api\Response\Commands as CommandsResponseApi;
 
 Route::prefix('/v1/project')->group(function () {
     Route::get('/', [QueriesProjectApi::class, 'get_all_project']);
@@ -26,4 +27,5 @@ Route::prefix('/v1/project')->group(function () {
     Route::post('/folder/{slug}', [CommandsFolderApi::class, 'post_folder']);
 
     Route::get('/response/{id}', [QueriesResponseApi::class, 'get_response_by_endpoint_id']);
+    Route::post('/response', [CommandsResponseApi::class, 'post_response']);
 });

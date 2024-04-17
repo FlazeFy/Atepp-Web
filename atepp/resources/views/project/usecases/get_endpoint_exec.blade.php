@@ -50,6 +50,7 @@
         <option value="send_download"><i class="fa-solid fa-download"></i> Send & Download</option>
         <option value="send_share"><i class="fa-solid fa-cloud-arrow-up"></i> Send & Share</option>
     </select>
+    <input hidden id="endpoint_id" value="">
 </div>
 
 <script>
@@ -103,14 +104,20 @@
                 }
                 time_box.innerHTML = `<span class='${time_box_color} px-3 ms-2 py-1 rounded-pill'>${timeTaken.toFixed(2)} ms</span>`
                 
+                // Environment
+                const env = navigator.userAgent
+
                 response_box.appendChild(pre)
 
                 // Save endpoint
                 check_endpoint_url(url)
                 .then(data => {
+                    let id = document.getElementById('endpoint_id').value
+
                     if(!data){
                         post_endpoint(method, url)
                     } 
+                    post_response_history(id, status, method, timeTaken, JSON.stringify(response), env)
                 })
                 .catch(error => {
                     alert('API error:', error);
@@ -139,6 +146,31 @@
                     reject(errorThrown)
                 }
             })
+        })
+    }
+    function post_response_history(id, status, method, time, body, env){
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/v1/project/response`,
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({ 
+                endpoint_id: id,
+                response_status: status,
+                response_method: method,
+                response_time: time,
+                response_body: body,
+                response_env: env
+            }), 
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response, textStatus, jqXHR) {
+                get_list_history(id)
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                // Do someting
+            }
         })
     }
 
