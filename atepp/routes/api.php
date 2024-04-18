@@ -14,7 +14,18 @@ use App\Http\Controllers\Api\Folder\Commands as CommandsFolderApi;
 use App\Http\Controllers\Api\Response\Queries as QueriesResponseApi;
 use App\Http\Controllers\Api\Response\Commands as CommandsResponseApi;
 
-Route::prefix('/v1/project')->group(function () {
+use App\Http\Controllers\Api\Auth\Commands as CommandAuthApi;
+use App\Http\Controllers\Api\Auth\Queries as QueryAuthApi;
+
+######################### Public Route #########################
+
+Route::post('/v1/login', [CommandAuthApi::class, 'login']);
+
+######################### Private Route #########################
+
+Route::get('/v1/logout', [QueryAuthApi::class, 'logout'])->middleware(['auth:sanctum']);
+
+Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [QueriesProjectApi::class, 'get_all_project']);
 
     Route::get('/endpoint/list', [QueriesEndpointApi::class, 'get_all_endpoint']);
@@ -31,7 +42,7 @@ Route::prefix('/v1/project')->group(function () {
     Route::post('/response', [CommandsResponseApi::class, 'post_response']);
 });
 
-Route::prefix('/v1/stats')->group(function () {
+Route::prefix('/v1/stats')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/response/performance', [QueriesResponseApi::class, 'stats_general_response_time']);
     Route::get('/response/status_code', [QueriesResponseApi::class, 'stats_general_status_code']);
 });

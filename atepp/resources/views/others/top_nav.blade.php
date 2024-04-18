@@ -32,7 +32,8 @@
                         <li><a class="dropdown-item" href="/feedback">Feedback</a></li>
                         <li><a class="dropdown-item" href="/help">Help Center</a></li>
                         <li><hr class="dropdown-divider bg-light mt-0"></li>
-                        <li class="px-2"><a class="dropdown-item bg-danger text-white rounded py-2" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a></li>
+                        <li class="px-2"><a class="dropdown-item bg-danger text-white rounded py-2" data-bs-toggle="modal" data-bs-target="#modalSignOut"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a></li>
+                        @include('others.sign_out')
                     </ul>
                 </li>
             </ul>
