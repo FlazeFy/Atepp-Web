@@ -33,4 +33,5 @@ Route::prefix('/v1/project')->group(function () {
 
 Route::prefix('/v1/stats')->group(function () {
     Route::get('/response/performance', [QueriesResponseApi::class, 'stats_general_response_time']);
+    Route::get('/response/status_code', [QueriesResponseApi::class, 'stats_general_status_code']);
 });

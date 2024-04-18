@@ -76,4 +76,37 @@ class Queries extends Controller
             ], Res::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function stats_general_status_code() 
+    {
+        try{
+            $res = ResponseModel::select(DB::raw("
+                    response_method,
+                    CASE
+                        WHEN response_status >= 100 AND response_status < 200 THEN 100
+                        WHEN response_status >= 200 AND response_status < 300 THEN 200
+                        WHEN response_status >= 300 AND response_status < 400 THEN 300
+                        WHEN response_status >= 400 AND response_status < 500 THEN 400
+                        WHEN response_status >= 500 AND response_status < 600 THEN 500
+                        ELSE '0'
+                    END AS response_general_status,
+                    COUNT(1) AS total
+                "))
+                ->groupBy('response_method')
+                ->groupBy('response_general_status')
+                ->where('response.created_by','dc4d52ec-afb1-11ed-afa1-0242ac120002')
+                ->get();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'response fetched',
+                'data' => $res
+            ], Res::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'something wrong. Please contact admin',
+            ], Res::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

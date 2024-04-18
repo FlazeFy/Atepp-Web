@@ -168,3 +168,22 @@ hr {
     cursor: pointer;
     text-decoration: underline !important;
 }
+
+.apexcharts-legend-text {
+    color: var(--whiteColor) !important;
+    font-size: var(--textXMD) !important;
+}
+.apexcharts-yaxis-texts-g.apexcharts-xaxis-inversed-texts-g text {
+    fill: var(--whiteColor) !important;
+    font-size: var(--textXMD) !important;
+}
+
+.apexcharts-tooltip, .apexcharts-tooltip-title, .apexcharts-menu {
+    background: var(--darkColor) !important;
+    color: var(--whiteColor) !important;
+}
+.apexcharts-menu-item:hover {
+    background: var(--darkColor) !important;
+    border-left: calc(var(--spaceMini) / 1.5) solid var(--whiteColor) !important;
+    border-right: none !important;
+}
