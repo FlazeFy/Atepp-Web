@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\Project\Queries as QueriesProjectApi;
+use App\Http\Controllers\Api\Project\Commands as CommandsProjectApi;
 
 use App\Http\Controllers\Api\Endpoint\Queries as QueriesEndpointApi;
 use App\Http\Controllers\Api\Endpoint\Commands as CommandsEndpointApi;
@@ -27,6 +28,7 @@ Route::get('/v1/logout', [QueryAuthApi::class, 'logout'])->middleware(['auth:san
 
 Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [QueriesProjectApi::class, 'get_all_project']);
+    Route::post('/', [CommandsProjectApi::class, 'post_project']);
     Route::get('/detail', [QueriesProjectApi::class, 'get_all_project_dashboard']);
 
     Route::get('/endpoint/list', [QueriesEndpointApi::class, 'get_all_endpoint']);

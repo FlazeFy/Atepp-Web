@@ -2,7 +2,7 @@
     <h1 class="fw-bold text-center mb-3" style="font-size:var(--textJumbo) !important;">My Project</h1>
     <div class="row ps-3">
         <div class="col">
-            <button class="btn btn-success w-100 py-4">
+            <button class="btn btn-success w-100 py-4" data-bs-toggle="modal" data-bs-target="#addProjectModal">
                 <h1 class="fw-bold" style="font-size:calc(var(--textXJumbo)*2) !important;"><i class="fa-solid fa-plus"></i></h1> 
                 <h2 class="mb-3">Add Project</h2>
                 <span class="bg-warning rounded-pill px-3 py-1 fw-bold" style="font-size:var(--textXMD) !important;"><i class="fa-solid fa-fire"></i> Unlimited</span>
@@ -57,7 +57,7 @@
                                 <span style="font-size:var(--textLG); font-weight:600;" class="bg-success px-3 py-1 me-1 rounded-pill">${data[i].project_category}</span><br>
                                 <span style="font-size:var(--textLG); font-weight:600;" class="bg-primary px-3 py-1 rounded-pill">${data[i].total_endpoint} Endpoint</span><br>
                             </div>
-                            <div class="mt-3">${data[i].project_desc}</div>
+                            <div class="mt-3">${data[i].project_desc ?? '<span class="fst-italic">- No Description Provided -</span>'}</div>
                             <div class="mt-3" style="font-size:var(--textXMD)">Created at : ${get_date_to_context(data[i].created_at,'calendar')}</div>
                         </button>
                         `

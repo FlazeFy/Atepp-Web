@@ -89,9 +89,12 @@ nav {
     font-size: var(--textXJumbo) !important;
 }
 
-input {
+input, .form-select, textarea {
     background: transparent !important;
     font-size: var(--textXLG) !important;
+}
+label {
+    font-weight: 600;
 }
 
 .btn-primary {
@@ -186,4 +189,14 @@ hr {
     background: var(--darkColor) !important;
     border-left: calc(var(--spaceMini) / 1.5) solid var(--whiteColor) !important;
     border-right: none !important;
+}
+
+/* Modal */
+.modal-content {
+    background: var(--darkColor);
+    border: calc(var(--spaceMini) / 1.5) solid var(--dangerBG) !important;
+}
+.modal-title {
+    font-weight: 600 !important;
+    font-size: var(--textJumbo);
 }
