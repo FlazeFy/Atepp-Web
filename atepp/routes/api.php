@@ -27,6 +27,7 @@ Route::get('/v1/logout', [QueryAuthApi::class, 'logout'])->middleware(['auth:san
 
 Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [QueriesProjectApi::class, 'get_all_project']);
+    Route::get('/detail', [QueriesProjectApi::class, 'get_all_project_dashboard']);
 
     Route::get('/endpoint/list', [QueriesEndpointApi::class, 'get_all_endpoint']);
     Route::get('/endpoint/folder/{slug}', [QueriesEndpointApi::class, 'get_endpoint_by_folder_slug']);

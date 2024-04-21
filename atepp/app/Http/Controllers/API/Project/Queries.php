@@ -15,7 +15,28 @@ class Queries extends Controller
         try{
             $user_id = $request->user()->id;
 
-            $res = ProjectModel::get_all_project($user_id);
+            $res = ProjectModel::get_all_project($user_id,'');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'project fetched',
+                'data' => $res
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => $e->getMessage(),
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function get_all_project_dashboard(Request $request) 
+    {
+        try{
+            $user_id = $request->user()->id;
+            $ext = ',count(1) as total_endpoint,project.created_at,project_desc';
+
+            $res = ProjectModel::get_all_project($user_id,$ext);
 
             return response()->json([
                 'status' => 'success',

@@ -24,6 +24,7 @@
 
         <!-- JS Collection -->
         <script src="{{ asset('/js/converter.js')}}"></script>
+        <script src="{{ asset('/js/generator.js')}}"></script>
 
         <!--Apex Chart-->
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
