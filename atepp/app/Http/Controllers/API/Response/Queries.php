@@ -11,10 +11,12 @@ use App\Models\ResponseModel;
 
 class Queries extends Controller
 {
-    public function get_response_by_endpoint_id($id) 
+    public function get_response_by_endpoint_id(Request $request, $id) 
     {
         try{
-            $res = ResponseModel::get_response_by_endpoint_id($id);
+            $user_id = $request->user()->id;
+
+            $res = ResponseModel::get_response_by_endpoint_id($id, $user_id);
 
             return response()->json([
                 'status' => 'success',
@@ -49,9 +51,11 @@ class Queries extends Controller
         }
     }
 
-    public function stats_general_response_time() 
+    public function stats_general_response_time(Request $request) 
     {
         try{
+            $user_id = $request->user()->id;
+
             $res = ResponseModel::select(DB::raw("
                     CASE
                         WHEN response_time < 1000 THEN 'Fast'
@@ -61,7 +65,7 @@ class Queries extends Controller
                     COUNT(1) AS total
                 "))
                 ->groupBy('context')
-                ->where('response.created_by','dc4d52ec-afb1-11ed-afa1-0242ac120002')
+                ->where('response.created_by',$user_id)
                 ->get();
 
             return response()->json([
@@ -77,9 +81,11 @@ class Queries extends Controller
         }
     }
 
-    public function stats_general_status_code() 
+    public function stats_general_status_code(Request $request) 
     {
         try{
+            $user_id = $request->user()->id;
+
             $res = ResponseModel::select(DB::raw("
                     response_method,
                     CASE
@@ -94,7 +100,7 @@ class Queries extends Controller
                 "))
                 ->groupBy('response_method')
                 ->groupBy('response_general_status')
-                ->where('response.created_by','dc4d52ec-afb1-11ed-afa1-0242ac120002')
+                ->where('response.created_by',$user_id)
                 ->get();
 
             return response()->json([

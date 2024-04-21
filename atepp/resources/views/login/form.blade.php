@@ -44,6 +44,11 @@
             type: 'POST',
             data: $('#form-login').serialize(),
             dataType: 'json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                
+            }
             success: function(response) {
                 var found = false
 

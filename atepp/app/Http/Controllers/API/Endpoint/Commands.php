@@ -33,6 +33,8 @@ class Commands extends Controller
     public function post_endpoint(Request $request) 
     {
         try{
+            $user_id = $request->user()->id;
+
             $res = EndpointModel::create([
                 'id' => Generator::get_uuid(), 
                 'endpoint_name' => $request->endpoint_name, 
@@ -40,7 +42,7 @@ class Commands extends Controller
                 'endpoint_url' => $request->endpoint_url, 
                 'endpoint_method' => $request->endpoint_method, 
                 'created_at' => date('Y-m-d H:i:s'), 
-                'created_by' => 'dc4d52ec-afb1-11ed-afa1-0242ac120002', 
+                'created_by' => $user_id, 
                 'updated_at' => null, 
                 'updated_by' => null, 
                 'deleted_at' => null, 

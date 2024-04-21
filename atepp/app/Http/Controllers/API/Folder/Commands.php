@@ -17,6 +17,7 @@ class Commands extends Controller
     public function post_folder(Request $request,$slug) 
     {
         try{
+            $user_id = $request->user()->id;
             $project = ProjectModel::select('id')->where('project_slug',$slug)->first();
 
             $res = FolderModel::create([
@@ -27,7 +28,7 @@ class Commands extends Controller
                 'folder_pin_code' => $request->folder_pin_code, 
                 'folder_desc' => $request->folder_desc, 
                 'created_at' => date('Y-m-d H:i:s'), 
-                'created_by' => 'dc4d52ec-afb1-11ed-afa1-0242ac120002', 
+                'created_by' => $user_id, 
                 'updated_at' => null, 
                 'updated_by' => null, 
                 'deleted_at' => null, 

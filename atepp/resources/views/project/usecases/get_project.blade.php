@@ -22,6 +22,8 @@
                 type: "get",
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Accept", "application/json");
+                    xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                    
                 }
             })
             .done(function (response) {
@@ -48,6 +50,8 @@
                 type: "get",
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Accept", "application/json");
+                    xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                    
                 }
             })
             .done(function (response) {
@@ -81,6 +85,8 @@
                 type: "get",
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Accept", "application/json");
+                    xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                    
                 }
             })
             .done(function (response) {
@@ -117,6 +123,11 @@
                 folder_desc: null,
                 folder_pin_code: null
             }), 
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                
+            },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

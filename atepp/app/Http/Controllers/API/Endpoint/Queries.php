@@ -10,10 +10,12 @@ use App\Models\EndpointModel;
 
 class Queries extends Controller
 {
-    public function get_all_endpoint() 
+    public function get_all_endpoint(Request $request) 
     {
         try{
-            $res = EndpointModel::get_all_endpoint();
+            $user_id = $request->user()->id;
+
+            $res = EndpointModel::get_all_endpoint($user_id);
 
             return response()->json([
                 'status' => 'success',

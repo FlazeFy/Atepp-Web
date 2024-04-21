@@ -15,9 +15,9 @@ class ProjectModel extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['id', 'project_slug', 'project_title', 'project_category', 'project_type', 'project_desc', 'project_main_lang', 'project_pin_code', 'created_at', 'created_by', 'updated_at', 'updated_by', 'deleted_at', 'deleted_by'];
 
-    public static function get_all_project(){
+    public static function get_all_project($user_id){
         $res = ProjectModel::select('project_slug','project_title', 'project_category', 'project_type')
-            ->where('created_by', 'dc4d52ec-afb1-11ed-afa1-0242ac120002')
+            ->where('created_by', $user_id)
             ->orderBy('project_title', 'asc')
             ->get();
 

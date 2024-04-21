@@ -10,10 +10,12 @@ use App\Models\ProjectModel;
 
 class Queries extends Controller
 {
-    public function get_all_project() 
+    public function get_all_project(Request $request) 
     {
         try{
-            $res = ProjectModel::get_all_project();
+            $user_id = $request->user()->id;
+
+            $res = ProjectModel::get_all_project($user_id);
 
             return response()->json([
                 'status' => 'success',

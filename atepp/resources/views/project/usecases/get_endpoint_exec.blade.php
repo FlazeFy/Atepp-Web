@@ -78,6 +78,11 @@
             url: url,
             type: method,
             dataType: 'json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                
+            },
             success: function(response, textStatus, jqXHR) {
                 // Response body
                 response_box.innerHTML = ''
@@ -139,6 +144,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Accept", "application/json");
+                    xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                    
+                },
                 success: function(response, textStatus, jqXHR) {
                     resolve(response.data)
                 },
@@ -162,6 +172,11 @@
                 response_body: body,
                 response_env: env
             }), 
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                
+            },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -183,7 +198,8 @@
                 type: "get",
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Accept", "application/json");
-                }
+                    xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                },
             })
             .done(function (response) {
                 let data =  response.data;
@@ -214,6 +230,11 @@
                 endpoint_name: null,
                 endpoint_desc: null
             }), 
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                
+            },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

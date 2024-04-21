@@ -16,6 +16,8 @@ class Commands extends Controller
     public function post_response(Request $request) 
     {
         try{
+            $user_id = $request->user()->id;
+
             $res = ResponseModel::create([
                 'id' => Generator::get_uuid(), 
                 'endpoint_id' => $request->endpoint_id, 
@@ -25,7 +27,7 @@ class Commands extends Controller
                 'response_body' => $request->response_body,  
                 'response_env' => $request->response_env,  
                 'created_at' => date('Y-m-d H:i:s'), 
-                'created_by' => 'dc4d52ec-afb1-11ed-afa1-0242ac120002', 
+                'created_by' => $user_id, 
             ]);
 
             return response()->json([
