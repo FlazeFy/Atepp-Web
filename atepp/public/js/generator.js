@@ -8,7 +8,9 @@ function generate_last_date(val) {
     let diff = Math.ceil(difference / (1000 * 3600 * 24))
   
     let res = 'undefined'
-    if (diff === 1) {
+    if (diff === 0) {
+        res = "Today"
+    } else if (diff === 1) {
         res = "Yesterday"
     } else if (diff <= 7) {
         res = `${diff} days ago`
