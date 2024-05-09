@@ -48,4 +48,5 @@ Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
 Route::prefix('/v1/stats')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/response/performance', [QueriesResponseApi::class, 'stats_general_response_time']);
     Route::get('/response/status_code', [QueriesResponseApi::class, 'stats_general_status_code']);
+    Route::get('/response/time_history', [QueriesResponseApi::class, 'stats_general_time_history']);
 });

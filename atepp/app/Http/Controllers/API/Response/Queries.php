@@ -115,4 +115,29 @@ class Queries extends Controller
             ], Res::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function stats_general_time_history(Request $request) 
+    {
+        try{
+            $user_id = $request->user()->id;
+
+            $res = ResponseModel::select(DB::raw("response_method, ROUND(response_time,2) as response_time, DATE(created_at) as created_at"))
+                ->groupBy('response_method')
+                ->groupBy('response_status')
+                ->orderBy('DATE(created_at)','ASC')
+                ->where('response.created_by',$user_id)
+                ->get();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'response fetched',
+                'data' => $res
+            ], Res::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'something wrong. Please contact admin',
+            ], Res::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
