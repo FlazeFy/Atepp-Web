@@ -1,7 +1,7 @@
 <h1 class="fw-bold text-center mb-3" style="font-size:var(--textJumbo) !important;">Response Time Taken</h1>
 <div class="row">
     <div class="col">
-        <button class="btn btn-primary w-100 py-4">
+        <button class="btn btn-primary w-100 py-4" data-bs-toggle="modal" data-bs-target="#toptenResponseModal" onclick="get_endpoint_top_ten('fast')">
             <h1 class="fw-bold" style="font-size:calc(var(--textXJumbo)*2) !important;" id="total_res_Fast">0</h1> 
             <h2 class="mb-3">Fast Response</h2>
             <span class="bg-success rounded-pill px-3 py-1 fw-bold" style="font-size:var(--textXMD) !important;">About < 1000 ms</span>
@@ -15,13 +15,14 @@
         </button>
     </div>
     <div class="col">
-        <button class="btn btn-primary w-100 py-4">
+        <button class="btn btn-primary w-100 py-4" data-bs-toggle="modal" data-bs-target="#toptenResponseModal" onclick="get_endpoint_top_ten('slow')">
             <h1 class="fw-bold" style="font-size:calc(var(--textXJumbo)*2) !important;" id="total_res_Slow">0</h1> 
             <h2 class="mb-3">Slow Response</h2>
             <span class="bg-danger rounded-pill px-3 py-1 fw-bold" style="font-size:var(--textXMD) !important;">About > 3000 ms</span>
         </button>
     </div>
 </div>
+@include('dashboard.usecases.get_endpoint_top_ten')
 
 <script>
     get_stats_perf()

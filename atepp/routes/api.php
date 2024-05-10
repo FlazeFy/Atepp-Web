@@ -33,6 +33,7 @@ Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/endpoint/list', [QueriesEndpointApi::class, 'get_all_endpoint']);
     Route::get('/endpoint/folder/{slug}', [QueriesEndpointApi::class, 'get_endpoint_by_folder_slug']);
+    Route::get('/endpoint/top/{ctx}', [QueriesEndpointApi::class, 'get_top_ten_endpoint_ctx']);
 
     Route::post('/endpoint/check', [CommandsEndpointApi::class, 'check_endpoint']);
     Route::post('/endpoint', [CommandsEndpointApi::class, 'post_endpoint']);

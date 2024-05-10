@@ -45,4 +45,20 @@ class EndpointModel extends Model
 
         return $res;
     }
+
+    public static function get_endpoint_by_response_time($ctx){
+        $res = EndpointModel::selectRaw('endpoint.id,endpoint_name,endpoint_desc,endpoint_url,response_method,ROUND(response_time,2) as response_time,response.created_at')
+            ->join('response','response.endpoint_id','=','endpoint.id');
+
+        if($ctx == 'fast'){
+            $res = $res->orderby('response_time', 'asc');
+        } else if($ctx == 'slow'){
+            $res = $res->orderby('response_time', 'desc');
+        }
+        
+        $res = $res->limit(10)
+            ->get();
+
+        return $res;
+    }
 }
