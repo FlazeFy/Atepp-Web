@@ -123,8 +123,8 @@ class Queries extends Controller
 
             $res = ResponseModel::select(DB::raw("response_method, ROUND(response_time,2) as response_time, DATE(created_at) as created_at"))
                 ->groupBy('response_method')
-                ->groupBy('response_status')
-                ->orderBy('DATE(created_at)','ASC')
+                ->groupByRaw('3')
+                ->orderBy('created_at','ASC')
                 ->where('response.created_by',$user_id)
                 ->get();
 

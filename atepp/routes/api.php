@@ -43,6 +43,8 @@ Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/response/{id}', [QueriesResponseApi::class, 'get_response_by_endpoint_id']);
     Route::get('/response/{id}/body', [QueriesResponseApi::class, 'get_response_detail_by_id']);
     Route::post('/response', [CommandsResponseApi::class, 'post_response']);
+
+    Route::get('/working_space', [QueriesProjectApi::class, 'get_working_space']);
 });
 
 Route::prefix('/v1/stats')->middleware(['auth:sanctum'])->group(function () {

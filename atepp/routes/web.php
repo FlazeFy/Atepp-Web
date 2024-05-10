@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\WorkingSpaceController;
 use App\Http\Controllers\LoginController;
 
 Route::prefix('/')->group(function () {
@@ -18,4 +19,8 @@ Route::prefix('/dashboard')->group(function () {
 Route::prefix('/project')->group(function () {
     Route::get('/', [ProjectController::class, 'index'])->name('project');
     Route::post('/select_project', [ProjectController::class, 'set_open_project']);
+});
+
+Route::prefix('/workingspace')->group(function () {
+    Route::get('/', [WorkingSpaceController::class, 'index'])->name('workingspace');
 });

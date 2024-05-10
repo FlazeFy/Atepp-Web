@@ -24,6 +24,7 @@
             `
 
             var options = {
+                // fix this
                 series: [
                     {
                         name: "GET",
