@@ -52,6 +52,7 @@ Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
 
 Route::prefix('/v1/comment')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/by/{endpoint}/{ctx}', [QueriesProjectApi::class, 'get_comment_by_endpoint_ctx']);
+    Route::post('/', [CommandsProjectApi::class, 'post_comment']);
 });
 
 Route::prefix('/v1/stats')->middleware(['auth:sanctum'])->group(function () {

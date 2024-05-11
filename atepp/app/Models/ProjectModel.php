@@ -19,7 +19,7 @@ class ProjectModel extends Model
         $res = ProjectModel::selectRaw('project_slug,project_title,project_category,project_type'.$ext)
             ->leftjoin('endpoint','endpoint.project_id','=','project.id')
             ->where('project.created_by', $user_id)
-            ->orderBy('project_title', 'asc')
+            ->orderBy('project_title', 'desc')
             ->groupBy('project.id')
             ->get();
 

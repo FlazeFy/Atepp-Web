@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 
 use App\Models\FolderModel;
 use App\Models\ProjectModel;
+use App\Models\CommentModel;
 
 use App\Helpers\Generator;
 use App\Helpers\Converter;
@@ -59,6 +60,35 @@ class Commands extends Controller
                     'project' => $res_project,
                     'folder' => $res_folder
                 ]
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => $e->getMessage(),
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function post_comment(Request $request) 
+    {
+        try{
+            $user_id = $request->user()->id;
+            $id = Generator::get_uuid();
+
+            $res = CommentModel::create([
+                'id' => $id, 
+                'endpoint_id' => $request->endpoint_id, 
+                'comment_context' => $request->comment_context, 
+                'comment_body' => $request->comment_body, 
+                'comment_attachment' => null, 
+                'created_at' => date('Y-m-d H:i:s'), 
+                'created_by' => $user_id,
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'comment created',
+                'data' => $res
             ], Response::HTTP_OK);
         } catch(\Exception $e) {
             return response()->json([

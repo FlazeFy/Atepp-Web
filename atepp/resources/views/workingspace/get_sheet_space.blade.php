@@ -63,10 +63,14 @@
                 <div class="modal-body" id="comment_holder">
                 </div>
                 <div class="modal-footer">
-                    <div class="d-flex justify-content-center w-100">
-                        <input id="comment_body" name="body" type="text" class="form-control me-2">
-                        <button type="button" class="btn btn-success" onclick="post_comment()"><i class="fa-solid fa-floppy-disk"></i> Send</button>
-                    </div>
+                    <form class="d-inline" id="form-comment">
+                        <div class="d-flex justify-content-center w-100">
+                            <input id="comment_context" name="comment_context" hidden>
+                            <input id="comment_body" name="comment_body" type="text" class="form-control me-2">
+                            <input id="endpoint_id" name="endpoint_id" hidden>
+                            <button type="button" class="btn btn-success" onclick="post_comment()"><i class="fa-solid fa-floppy-disk"></i> Send</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -231,7 +235,7 @@
 
                 for(var i = 0; i < data.length; i++){
                     $('#comment_holder').append(`
-                        <div class="mb-2 text-white">
+                        <div class="mb-3 text-white">
                             <h6>${data[i].comment_body}</h6>
                             <a class="fst-italic" style="font-size:var(--textXMD);">@username at ${get_date_to_context(data[i].created_at,'calendar')}</a>
                         </div>
@@ -245,6 +249,32 @@
 
     function callComment(ctx, id){
         $('#ctx_comment_title').text(ctx)
+        $('#comment_context').val(ctx)
+        $('#endpoint_id').val(id)
         get_comment_by_endpoint_ctx(id, ctx)
+    }
+
+    function post_comment(){
+        $.ajax({
+            url: '/api/v1/comment',
+            type: 'POST',
+            data: $('#form-comment').serialize(),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");    
+            },
+            success: function(response) {
+                $('#comment_body').val('')
+                const ctx = $('#comment_context').val()
+                const id = $('#endpoint_id').val()
+                get_comment_by_endpoint_ctx(id, ctx)
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                if(allMsg){
+                    $('#all_msg').html(icon + allMsg)
+                }
+            }
+        });
     }
 </script>
