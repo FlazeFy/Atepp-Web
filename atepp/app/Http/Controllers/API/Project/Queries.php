@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 
 use App\Models\ProjectModel;
 use App\Models\EndpointModel;
+use App\Models\CommentModel;
 
 class Queries extends Controller
 {
@@ -72,6 +73,26 @@ class Queries extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'project fetched',
+                'data' => $res
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => $e->getMessage(),
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function get_comment_by_endpoint_ctx(Request $request, $endpoint, $ctx) 
+    {
+        try{
+            $user_id = $request->user()->id;
+
+            $res = CommentModel::get_comment_by_endpoint_ctx($user_id, $endpoint, $ctx);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'comment fetched',
                 'data' => $res
             ], Response::HTTP_OK);
         } catch(\Exception $e) {

@@ -27,7 +27,7 @@
             .cell {
                 cursor: pointer;
                 padding: 0;
-                min-width: 160px;
+                min-width: 180px;
                 position: relative;
                 font-size: var(--textXMD);
             }
@@ -35,6 +35,7 @@
                 margin: 0;
                 width: 100%;
                 height: 100%;
+                padding-inline: var(--spaceXSM);
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -56,14 +57,16 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Comment at cell <span id="cell_number"></span></h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Comment at Cell <span id="ctx_comment_title"></span></h5>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-circle-xmark"></i></button>
                 </div>
-                <div class="modal-body">
-                    
+                <div class="modal-body" id="comment_holder">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" onclick="post_project()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    <div class="d-flex justify-content-center w-100">
+                        <input id="comment_body" name="body" type="text" class="form-control me-2">
+                        <button type="button" class="btn btn-success" onclick="post_comment()"><i class="fa-solid fa-floppy-disk"></i> Send</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -148,16 +151,16 @@
                     }
                     $('#tb_working_space').append(`
                         <tr>
-                            <th scope="row" class="cell"><button class="btn btn-primary w-100"><i class="fa-solid fa-play"></i></button></th>
-                            <td class="cell">${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection">${data[i].endpoint_name}</button>` : data[i].endpoint_name}</td>
-                            <td class="cell">${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection">${data[i].folder_name}</button>` : data[i].folder_name ?? '-'}</td>
-                            <td class="cell">${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection">${data[i].endpoint_url}</button>` : `<a href="${data[i].endpoint_url}">${data[i].endpoint_url}</a>`}</td>
+                            <th scope="row"><button class="btn btn-primary w-100"><i class="fa-solid fa-play"></i></button></th>
+                            <td class="cell">${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection" onclick="callComment('Name','${data[i].endpoint_id}')">${data[i].endpoint_name}</button>` : data[i].endpoint_name}</td>
+                            <td class="cell">${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection" onclick="callComment('Folder','${data[i].endpoint_id}')">${data[i].folder_name}</button>` : data[i].folder_name ?? '-'}</td>
+                            <td class="cell">${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection" onclick="callComment('URL','${data[i].endpoint_id}')">${data[i].endpoint_url}</button>` : `<a href="${data[i].endpoint_url}">${data[i].endpoint_url}</a>`}</td>
                             <td class="cell">-</td>
                             <td class="cell">-</td>
                             <td class="cell">-</td>
                             <td class="cell">-</td>
                             <td class="cell">
-                                ${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection">
+                                ${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection" onclick="callComment('Performance','${data[i].endpoint_id}')">
                                     <h6 class="fw-bold">Max Response Time</h6>
                                     <p>${data[i].max_response_time ?? '-'} ms</p>
                                     <h6 class="fw-bold">Min Response Time</h6>
@@ -175,7 +178,7 @@
                             </td>
                             <td class="cell">-</td>
                             <td class="cell">
-                                ${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection">
+                                ${is_edit ? `<button data-bs-toggle="modal" data-bs-target="#cellCommentSection" onclick="callComment('Created By','${data[i].endpoint_id}')">
                                     <p>${data[i].created_by}</p>
                                     <p style="font-size:var(--textMD);">At ${get_date_to_context(data[i].created_at,'calendar')}</p>
                                     </button>` :
@@ -208,7 +211,40 @@
             });
     }
 
-    function callComment(){
-        alert('test')
+    function get_comment_by_endpoint_ctx(endpoint_id, ctx) {
+        const is_edit = <?= session()->get('comment_mode_key')."\n" ?>
+        $('#comment_holder').empty()
+        $.ajax({
+                url: `http://127.0.0.1:8000/api/v1/comment/by/${endpoint_id}/${ctx}`,
+                datatype: "json",
+                type: "get",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Accept", "application/json");
+                    xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                    
+                }
+            })
+            .done(function (response) {
+                let data =  response.data.data
+
+                let project_before = ''
+
+                for(var i = 0; i < data.length; i++){
+                    $('#comment_holder').append(`
+                        <div class="mb-2 text-white">
+                            <h6>${data[i].comment_body}</h6>
+                            <a class="fst-italic" style="font-size:var(--textXMD);">@username at ${get_date_to_context(data[i].created_at,'calendar')}</a>
+                        </div>
+                    `)
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                // Do someting
+            });
+    }
+
+    function callComment(ctx, id){
+        $('#ctx_comment_title').text(ctx)
+        get_comment_by_endpoint_ctx(id, ctx)
     }
 </script>

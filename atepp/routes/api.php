@@ -18,6 +18,8 @@ use App\Http\Controllers\Api\Response\Commands as CommandsResponseApi;
 use App\Http\Controllers\Api\Auth\Commands as CommandAuthApi;
 use App\Http\Controllers\Api\Auth\Queries as QueryAuthApi;
 
+use App\Http\Controllers\Api\Comment\Queries as QueriesCommentApi;
+
 ######################### Public Route #########################
 
 Route::post('/v1/login', [CommandAuthApi::class, 'login']);
@@ -46,6 +48,10 @@ Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
     Route::post('/response', [CommandsResponseApi::class, 'post_response']);
 
     Route::get('/working_space', [QueriesProjectApi::class, 'get_working_space']);
+});
+
+Route::prefix('/v1/comment')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/by/{endpoint}/{ctx}', [QueriesProjectApi::class, 'get_comment_by_endpoint_ctx']);
 });
 
 Route::prefix('/v1/stats')->middleware(['auth:sanctum'])->group(function () {
