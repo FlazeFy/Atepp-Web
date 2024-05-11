@@ -97,11 +97,15 @@ label {
     font-weight: 600;
 }
 
+.btn-primary.active {
+    color: var(--primaryColor) !important;
+}
 .btn-primary {
     background: var(--darkColor) !important;
     border: calc(var(--spaceMini) / 2) solid var(--dangerBG) !important;
     border-radius: 0;
 }
+
 
 .dropdown-menu {
     background: var(--darkColor);
@@ -117,7 +121,7 @@ label {
     border-left: calc(var(--spaceMini) / 1.25) solid var(--whiteColor);
 }
 
-.nav-link, .dropdown-item, button, a, .btn-endpoint {
+.nav-link, .dropdown-item, button, a, .btn-endpoint, .cell {
     -webkit-transition: all 0.35s;
     -o-transition: all 0.35s;
     transition: all 0.35s;

@@ -11,6 +11,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        if(!session()->get('comment_mode_key')){
+            session()->put('comment_mode_key', "false");
+        }
+
         return view('dashboard.index')
             ->with('active_page','dashboard');
     }

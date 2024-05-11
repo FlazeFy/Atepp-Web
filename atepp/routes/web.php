@@ -23,4 +23,6 @@ Route::prefix('/project')->group(function () {
 
 Route::prefix('/workingspace')->group(function () {
     Route::get('/', [WorkingSpaceController::class, 'index'])->name('workingspace');
+
+    Route::post('/mode/comment_mode/{status}', [WorkingSpaceController::class, 'toogle_comment_mode']);
 });

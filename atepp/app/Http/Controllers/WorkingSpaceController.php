@@ -14,4 +14,10 @@ class WorkingSpaceController extends Controller
         return view('workingspace.index')
             ->with('active_page','workingspace');
     }
+
+    public function toogle_comment_mode($status){
+        session()->put('comment_mode_key', $status);
+
+        return redirect()->back();
+    }
 }

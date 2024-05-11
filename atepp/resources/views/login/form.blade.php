@@ -17,7 +17,7 @@
     <input hidden name="email" value="" id="email">
     <input hidden name="role" value="" id="role">
     <input hidden name="profile_pic" value="" id="profile_pic">
-    <a onclick="login()" class="btn btn-primary w-100 py-3"><i class="fa-solid fa-arrow-right-to-bracket mx-1"></i> Submit</a>
+    <a onclick="login()" id="submit_btn" class="btn btn-primary w-100 py-3"><i class="fa-solid fa-arrow-right-to-bracket mx-1"></i> Submit</a>
 </form>
 
 <script>
