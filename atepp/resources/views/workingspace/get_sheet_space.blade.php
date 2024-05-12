@@ -144,9 +144,23 @@
                             <tr>
                                 <th scope="row"><button class="btn btn-primary w-100"><i class="fa-solid fa-box-open"></i></button></th>
                                 <td colspan="3"><button class="btn btn-primary py-3 w-100 h-100 text-start"><span class="rounded-pill px-3 py-1 bg-success me-2">${data[i].project_category}</span> ${data[i].project_title}</button></td>
-                                <td colspan="5"><button class="btn btn-primary w-100 text-start">
-                                    <h6 class="fw-bold">Description</h6>
-                                    <p>${data[i].project_desc ?? '-'} ms</p>
+                                <td colspan="5">
+                                    <div id="section-show-desc" class="d-block">
+                                        <button class="btn btn-primary w-100 text-start" onclick="toogle_edit_desc()" title="Click to edit">
+                                            <h6 class="fw-bold">Description</h6>
+                                            <p>${data[i].project_desc ?? '-'}</p>
+                                        </button>
+                                    </div>
+                                    <div id="section-edit-desc" class="d-none">
+                                        <form id="form-edit-project-desc">
+                                            <textarea class="form-control" id="project_desc" value="${data[i].project_desc ?? ''}">${data[i].project_desc ?? ''}</textarea>
+                                            <div class="d-flex justify-content-end mt-2">
+                                                <a id="project_desc_msg" class="input-length"></a>
+                                                <a class="btn btn-danger me-2" onclick="toogle_edit_desc()"><i class="fa-regular fa-circle-xmark"></i></a>
+                                                <a class="btn btn-success" onclick="put_project_desc('${data[i].project_slug}')"><i class="fa-solid fa-floppy-disk"></i></a>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </td>
                                 <td colspan="3"><button class="btn btn-primary w-100"><i class="fa-solid fa-user"></i> Manage</button></td>
                                 <td colspan="3"><button class="btn btn-primary w-100"><i class="fa-solid fa-chart-simple"></i> Dashboard</button></td>
@@ -223,9 +237,8 @@
                 datatype: "json",
                 type: "get",
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Accept", "application/json");
-                    xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
-                    
+                    xhr.setRequestHeader("Accept", "application/json")
+                    xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>")
                 }
             })
             .done(function (response) {
@@ -256,7 +269,7 @@
 
     function post_comment(){
         $.ajax({
-            url: '/api/v1/comment',
+            url: '/api/v1/comment', 
             type: 'POST',
             data: $('#form-comment').serialize(),
             dataType: 'json',
@@ -274,6 +287,35 @@
                 if(allMsg){
                     $('#all_msg').html(icon + allMsg)
                 }
+            }
+        });
+    }
+
+    function toogle_edit_desc(){
+        if($('#section-edit-desc').attr("class") == 'd-none'){
+            form_count_char_limit('project_desc', 'project_desc_msg', 1000)
+            $('#section-edit-desc').removeClass().addClass("d-block")
+            $('#section-show-desc').removeClass().addClass("d-none")
+        } else {
+            $('#section-edit-desc').removeClass().addClass("d-none")
+            $('#section-show-desc').removeClass().addClass("d-block")
+        }
+    }
+    function put_project_desc(slug){
+        $.ajax({
+            url: `/api/v1/project/put_project_desc/${slug}`,
+            type: 'PUT',
+            data: $('#form-edit-project-desc').serialize(),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");    
+            },
+            success: function(response) {
+                
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                
             }
         });
     }

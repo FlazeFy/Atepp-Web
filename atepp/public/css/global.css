@@ -195,6 +195,12 @@ hr {
     border-right: none !important;
 }
 
+.input-length {
+    font-style: italic;
+    font-size: var(--textXMD);
+    margin-right: var(--spaceMD);
+}
+
 /* Modal */
 .modal-content {
     background: var(--darkColor);

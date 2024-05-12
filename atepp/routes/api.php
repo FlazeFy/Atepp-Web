@@ -48,6 +48,8 @@ Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
     Route::post('/response', [CommandsResponseApi::class, 'post_response']);
 
     Route::get('/working_space', [QueriesProjectApi::class, 'get_working_space']);
+
+    Route::put('/put_project_desc/{slug}', [CommandsProjectApi::class, 'put_project_desc']);
 });
 
 Route::prefix('/v1/comment')->middleware(['auth:sanctum'])->group(function () {
