@@ -122,6 +122,7 @@
     get_working_space(page)
     function get_working_space(page) {
         const is_edit = <?= session()->get('comment_mode_key')."\n" ?>
+        $('#tb_working_space').empty()
         $.ajax({
                 url: `http://127.0.0.1:8000/api/v1/project/working_space?page=${page}`,
                 datatype: "json",
@@ -143,7 +144,35 @@
                         $('#tb_working_space').append(`
                             <tr>
                                 <th scope="row"><button class="btn btn-primary w-100"><i class="fa-solid fa-box-open"></i></button></th>
-                                <td colspan="3"><button class="btn btn-primary py-3 w-100 h-100 text-start"><span class="rounded-pill px-3 py-1 bg-success me-2">${data[i].project_category}</span> ${data[i].project_title}</button></td>
+                                <td colspan="3">
+                                    <div id="section-show-project-title" class="d-block">
+                                        <button class="btn btn-primary py-3 w-100 h-100 text-start" onclick="toogle_edit_project_title()" title="Click to edit"><span class="rounded-pill px-3 py-1 bg-success me-2">${data[i].project_category}</span> ${data[i].project_title}</button>
+                                    </div>
+                                    <div id="section-edit-project-title" class="d-none">
+                                        <form id="form-edit-project-info">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="form-floating w-75 me-2">
+                                                    <select class="form-select" id="project_category" name="project_category" aria-label="Floating label select example">
+                                                        <option value="Education" ${data[i].project_category == 'Education' ? 'Selected' : ''}>Education</option>
+                                                        <option value="Statistic" ${data[i].project_category == 'Statistic' ? 'Selected' : ''}>Statistic</option>
+                                                        <option value="Company" ${data[i].project_category == 'Company' ? 'Selected' : ''}>Company</option>
+                                                        <option value="Health" ${data[i].project_category == 'Health' ? 'Selected' : ''}>Health</option>
+                                                    </select>
+                                                    <label for="floatingSelect">Category</label>
+                                                </div>
+                                                <div class="form-floating w-100">
+                                                    <input class="form-control" id="project_title" name="project_title" value="${data[i].project_title}"/>
+                                                    <label for="floatingTextarea2">Title</label>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end mt-2">
+                                                <a id="project_desc_msg" class="input-length"></a>
+                                                <a class="btn btn-danger me-2" onclick="toogle_edit_project_title()"><i class="fa-regular fa-circle-xmark"></i></a>
+                                                <a class="btn btn-success" onclick="put_project_info('${data[i].project_slug}')"><i class="fa-solid fa-floppy-disk"></i></a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
                                 <td colspan="5">
                                     <div id="section-show-desc" class="d-block">
                                         <button class="btn btn-primary w-100 text-start" onclick="toogle_edit_desc()" title="Click to edit">
@@ -153,7 +182,10 @@
                                     </div>
                                     <div id="section-edit-desc" class="d-none">
                                         <form id="form-edit-project-desc">
-                                            <textarea class="form-control" id="project_desc" value="${data[i].project_desc ?? ''}">${data[i].project_desc ?? ''}</textarea>
+                                            <div class="form-floating">
+                                                <textarea class="form-control" id="project_desc" name="project_desc" value="${data[i].project_desc ?? ''}" style="min-height:100px;">${data[i].project_desc ?? ''}</textarea>
+                                                <label for="floatingTextarea2">Comments</label>
+                                            </div>
                                             <div class="d-flex justify-content-end mt-2">
                                                 <a id="project_desc_msg" class="input-length"></a>
                                                 <a class="btn btn-danger me-2" onclick="toogle_edit_desc()"><i class="fa-regular fa-circle-xmark"></i></a>
@@ -312,7 +344,37 @@
                 xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");    
             },
             success: function(response) {
+                get_working_space(page)
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
                 
+            }
+        });
+    }
+
+    function toogle_edit_project_title(){
+        if($('#section-edit-project-title').attr("class") == 'd-none'){
+            form_count_char_limit('project_desc', 'project_desc_msg', 1000)
+            $('#section-edit-project-title').removeClass().addClass("d-block")
+            $('#section-show-project-title').removeClass().addClass("d-none")
+        } else {
+            $('#section-edit-project-title').removeClass().addClass("d-none")
+            $('#section-show-project-title').removeClass().addClass("d-block")
+        }
+    }
+
+    function put_project_info(slug){
+        $.ajax({
+            url: `/api/v1/project/put_project_info/${slug}`,
+            type: 'PUT',
+            data: $('#form-edit-project-info').serialize(),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");    
+            },
+            success: function(response) {
+                get_working_space(page)
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
                 

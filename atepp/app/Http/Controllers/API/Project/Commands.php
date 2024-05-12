@@ -120,4 +120,28 @@ class Commands extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function put_project_info(Request $request, $slug) 
+    {
+        try{
+            $user_id = $request->user()->id;
+            $res = ProjectModel::where('created_by',$user_id)
+                ->where('project_slug',$slug)
+                ->update([
+                    'project_category'=>$request->project_category,
+                    'project_title'=>$request->project_title
+                ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'comment updated',
+                'data' => $request->project_desc
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => $e->getMessage(),
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

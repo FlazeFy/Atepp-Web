@@ -50,6 +50,7 @@ Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/working_space', [QueriesProjectApi::class, 'get_working_space']);
 
     Route::put('/put_project_desc/{slug}', [CommandsProjectApi::class, 'put_project_desc']);
+    Route::put('/put_project_info/{slug}', [CommandsProjectApi::class, 'put_project_info']);
 });
 
 Route::prefix('/v1/comment')->middleware(['auth:sanctum'])->group(function () {
