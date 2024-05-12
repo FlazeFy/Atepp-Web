@@ -102,4 +102,28 @@ class Queries extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function stats_project_endpoint_method(Request $request,$slug) 
+    {
+        try{
+            $user_id = $request->user()->id;
+
+            $res = ProjectModel::selectRaw('endpoint_method as context, count(1) as total')
+                ->join('endpoint','endpoint.project_id','=','project.id')
+                ->where('project_slug',$slug)
+                ->limit(7)
+                ->get();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'comment fetched',
+                'data' => $res
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => $e->getMessage(),
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

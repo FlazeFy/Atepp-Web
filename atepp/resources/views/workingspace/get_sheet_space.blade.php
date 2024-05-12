@@ -195,7 +195,33 @@
                                     </div>
                                 </td>
                                 <td colspan="3"><button class="btn btn-primary w-100"><i class="fa-solid fa-user"></i> Manage</button></td>
-                                <td colspan="3"><button class="btn btn-primary w-100"><i class="fa-solid fa-chart-simple"></i> Dashboard</button></td>
+                                <td colspan="3">
+                                    <button class="btn btn-primary w-100" onclick="call_dashboard('${data[i].project_slug}')" data-bs-toggle="modal" data-bs-target="#${data[i].project_slug}-dashboardModal"><i class="fa-solid fa-chart-simple"></i> Dashboard</button>
+                                    <div class="modal fade" id="${data[i].project_slug}-dashboardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Dashboard</h5>
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-circle-xmark"></i></button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <div class="row">
+                                                        <div class="col-lg-5">
+                                                            <h6>Most Endpoint Method</h6>
+                                                            <div id="most_endpoint_method_chart"></div>
+                                                        </div>
+                                                        <div class="col-lg-5">
+                                                        
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </td>
                             </tr>
                         `)
                     }
@@ -380,5 +406,47 @@
                 
             }
         });
+    }
+
+    function call_dashboard(slug){
+        get_stats_project_endpoint_method(slug)
+    }
+
+    function get_stats_project_endpoint_method(slug) {
+        const methods = ['GET','POST','PUT','DELETE','PATCH','HEAD','OPTIONS']
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/v1/stats/project/endpoint_method/${slug}`,
+            datatype: "json",
+            type: "get",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                
+            }
+        })
+        .done(function (response) {
+            let data =  response.data
+            var options = {
+                series: data.map(dt => parseInt(dt.total)),
+                chart: {
+                type: 'pie',
+            },
+            labels: data.map(dt => dt.context),
+            responsive: [{
+            breakpoint: 480,
+                options: {
+                    legend: {
+                    position: 'bottom'
+                    }
+                }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#most_endpoint_method_chart"), options);
+            chart.render();
+        })
+        .fail(function (jqXHR, ajaxOptions, thrownError) {
+            // Do someting
+            });
     }
 </script>

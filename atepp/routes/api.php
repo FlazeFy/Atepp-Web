@@ -62,4 +62,6 @@ Route::prefix('/v1/stats')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/response/performance', [QueriesResponseApi::class, 'stats_general_response_time']);
     Route::get('/response/status_code', [QueriesResponseApi::class, 'stats_general_status_code']);
     Route::get('/response/time_history', [QueriesResponseApi::class, 'stats_general_time_history']);
+
+    Route::get('/project/endpoint_method/{slug}', [QueriesProjectApi::class, 'stats_project_endpoint_method']);
 });
