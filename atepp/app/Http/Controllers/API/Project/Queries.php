@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
+
 use App\Models\ProjectModel;
 use App\Models\EndpointModel;
 use App\Models\CommentModel;
@@ -112,6 +116,34 @@ class Queries extends Controller
                 ->join('endpoint','endpoint.project_id','=','project.id')
                 ->where('project_slug',$slug)
                 ->limit(7)
+                ->get();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'comment fetched',
+                'data' => $res
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => $e->getMessage(),
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function stats_project_activity(Request $request,$slug) 
+    {
+        try{
+            $user_id = $request->user()->id;
+            $currentYear = Carbon::now()->year;
+
+            $res = ProjectModel::selectRaw(DB::raw("DATE_FORMAT(response.created_at, '%Y-%m-%d') AS context, COUNT(1) AS total"))
+                ->join('endpoint', 'endpoint.project_id', '=', 'project.id')
+                ->join('response', 'response.endpoint_id', '=', 'endpoint.id')
+                ->groupByRaw("DATE_FORMAT(response.created_at, '%Y-%m-%d')")
+                ->where('project_slug', $slug)
+                ->whereRaw("YEAR(response.created_at) = $currentYear") 
+                ->orderBy('response.created_at', 'ASC')
                 ->get();
 
             return response()->json([

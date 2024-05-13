@@ -50,6 +50,10 @@
             ";
         }
     ?>
+
+    .apexcharts-heatmap-rect {
+        stroke:transparent !important;
+    }
 </style>
 
 @if(session()->get('comment_mode_key') == true)
@@ -211,10 +215,14 @@
                                                             <div id="most_endpoint_method_chart"></div>
                                                         </div>
                                                         <div class="col-lg-5">
-                                                        
+                                                            
                                                         </div>
                                                         <div class="col-lg-2">
                                                         
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <h6>Project Activity in ${new Date().getFullYear()}</h6>
+                                                            <div id="weekly_testing_pattern"></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -410,6 +418,7 @@
 
     function call_dashboard(slug){
         get_stats_project_endpoint_method(slug)
+        get_stats_testing_pattern_week(slug)
     }
 
     function get_stats_project_endpoint_method(slug) {
@@ -444,6 +453,174 @@
 
             var chart = new ApexCharts(document.querySelector("#most_endpoint_method_chart"), options);
             chart.render();
+        })
+        .fail(function (jqXHR, ajaxOptions, thrownError) {
+            // Do someting
+            });
+    }
+
+    function get_stats_testing_pattern_week(slug) {
+        const methods = ['GET','POST','PUT','DELETE','PATCH','HEAD','OPTIONS']
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/v1/stats/project/activity/${slug}`,
+            datatype: "json",
+            type: "get",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                
+            }
+        })
+        .done(function (response) {
+            let data =  response.data
+
+            function generateDataForWeekday(weekday, year) {
+                let res = []
+                let currentDate = new Date(year, 0, 1)
+                while (currentDate.getFullYear() === year) {
+                    if (currentDate.getDay() === weekday) {
+                        let date = currentDate.toISOString().split('T')[0]
+                        // let val = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min
+                        let val  = 0
+                        for(var i = 0; i < data.length; i++){
+                            if(data[i].context == date){
+                                val = data[i].total
+                            } 
+                        }
+                        res.push({
+                            x: date,
+                            y: val,
+                        })
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1)
+                }
+                return res
+            }
+
+            var options = {
+                series: [
+                    {
+                        name: 'Saturday',
+                        data: generateDataForWeekday(6, 2024)
+                    },
+                    {
+                        name: 'Friday',
+                        data: generateDataForWeekday(5, 2024)
+                    },
+                    {
+                        name: 'Thursday',
+                        data: generateDataForWeekday(4, 2024)
+                    },
+                    {
+                        name: 'Wednesday',
+                        data: generateDataForWeekday(3, 2024)
+                    },
+                    {
+                        name: 'Tuesday',
+                        data: generateDataForWeekday(2, 2024)
+                    },
+                    {
+                        name: 'Monday',
+                        data: generateDataForWeekday(1, 2024)
+                    },
+                    {
+                        name: 'Sunday',
+                        data: generateDataForWeekday(0, 2024)
+                    },
+                ],
+                chart: {
+                    height: 350,
+                    type: 'heatmap'
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                colors: ["#F43B41"],
+                xaxis: {
+                    type: 'category',
+                    labels: {
+                        formatter: function (value) {
+                            let date = new Date(value);
+                            let month = date.toLocaleString('default', { month: 'short' })
+                            let weekNumber = Math.ceil(date.getDate() / 7)
+
+                            return `${month} W-${weekNumber}`
+                        },
+                        style: {
+                            colors: '#FFF'
+                        }
+                    }
+                },
+                yaxis : {
+                    labels : {
+                        formatter: function (value) {
+                            if (value == 'Sunday') {
+                                return 'Saturday'
+                            } else if (value == 'Monday') {
+                                return 'Sunday'
+                            } else if (value == 'Tuesday') {
+                                return 'Monday'
+                            } else if (value == 'Wednesday') {
+                                return 'Tuesday'
+                            } else if (value == 'Thursday') {
+                                return 'Wednesday'
+                            } else if (value == 'Friday') {
+                                return 'Thursday'
+                            } else if (value == 'Saturday') {
+                                return 'Friday'
+                            }
+                        },
+                        style: {
+                            colors: '#FFF'
+                        }
+                    }
+                },
+                toolbar: {
+                    show: false, // still show
+                },
+                tooltip: {
+                    x: {
+                        show: true,
+                        formatter: function (value, { series, seriesIndex, dataPointIndex, w }) {
+                            let dayOfWeek = new Date(value).getDay()
+                            let date = new Date(value)                            
+
+                            let seriesName = w.config.series[seriesIndex].name
+
+                            if (seriesName == 'Sunday') {
+                                date.setDate(date.getDate() + 0) 
+                            } else if (seriesName == 'Monday') {
+                                date.setDate(date.getDate() + 1)
+                            } else if (seriesName == 'Tuesday') {
+                                date.setDate(date.getDate() + 2) 
+                            } else if (seriesName == 'Wednesday') {
+                                date.setDate(date.getDate() + 3)
+                            } else if (seriesName == 'Thursday') {
+                                date.setDate(date.getDate() + 4) 
+                            } else if (seriesName == 'Friday') {
+                                date.setDate(date.getDate() + 5) 
+                            } else if (seriesName == 'Saturday') {
+                                date.setDate(date.getDate() + 6)
+                            }
+                            date.setDate(date.getDate() - 6)
+                            return `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
+                        },
+                    },
+                    y: {
+                        formatter: function (value, { series, seriesIndex, dataPointIndex, w }) {
+                            let seriesData = w.config.series[seriesIndex].data
+                            let yValue = seriesData[dataPointIndex].y
+                            return yValue
+                        },
+                        title: {
+                            formatter: (seriesName) => `Total Activity : `,
+                        },
+                    },
+                },
+            }
+
+            var chart = new ApexCharts(document.querySelector("#weekly_testing_pattern"), options)
+            chart.render()
         })
         .fail(function (jqXHR, ajaxOptions, thrownError) {
             // Do someting

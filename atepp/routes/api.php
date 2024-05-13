@@ -64,4 +64,5 @@ Route::prefix('/v1/stats')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/response/time_history', [QueriesResponseApi::class, 'stats_general_time_history']);
 
     Route::get('/project/endpoint_method/{slug}', [QueriesProjectApi::class, 'stats_project_endpoint_method']);
+    Route::get('/project/activity/{slug}', [QueriesProjectApi::class, 'stats_project_activity']);
 });
