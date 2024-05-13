@@ -80,8 +80,11 @@
             dataType: 'json',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
-                
+                if($('#auth_method').val() != 'no_auth'){
+                    if($('#auth_method').val() == 'bearer_token'){
+                        xhr.setRequestHeader("Authorization", `Bearer ${$('#bearer_token_auth').val()}`);
+                    }
+                }
             },
             success: function(response, textStatus, jqXHR) {
                 // Response body

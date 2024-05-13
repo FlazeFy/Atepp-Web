@@ -9,7 +9,12 @@
     <div class="row">
         <div class="col">
             <h1 class="fw-bold">Params</h1>
-            @include('project.usecases.get_history')
+            <div id="tabs_authorization" style="">
+                @include('project.usecases.get_authorization')
+            </div>
+            <div id="tabs_history" style="display:none;">
+                @include('project.usecases.get_history')
+            </div>
         </div>
         <div class="col">
             <h1 class="fw-bold">Response <span id="response_status_code"></span> <span id="response_time"></span></h1>
