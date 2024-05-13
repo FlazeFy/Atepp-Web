@@ -20,7 +20,8 @@ class SiteTest extends TestCase
             '/', 
             '/login', 
             '/dashboard',
-            '/project'
+            '/project',
+            '/workingspace'
         ];
         
         foreach ($routes as $route) {
