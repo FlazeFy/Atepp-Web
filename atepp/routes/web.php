@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\WorkingSpaceController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\DummyController;
 
 Route::prefix('/')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -25,4 +26,8 @@ Route::prefix('/workingspace')->group(function () {
     Route::get('/', [WorkingSpaceController::class, 'index'])->name('workingspace');
 
     Route::post('/mode/comment_mode/{status}', [WorkingSpaceController::class, 'toogle_comment_mode']);
+});
+
+Route::prefix('/dummy')->group(function () {
+    Route::get('/', [DummyController::class, 'index'])->name('dummy');
 });

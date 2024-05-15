@@ -20,6 +20,8 @@ use App\Http\Controllers\Api\Auth\Queries as QueryAuthApi;
 
 use App\Http\Controllers\Api\Comment\Queries as QueriesCommentApi;
 
+use App\Http\Controllers\Api\Dictionary\Queries as QueriesDctApi;
+
 ######################### Public Route #########################
 
 Route::post('/v1/login', [CommandAuthApi::class, 'login']);
@@ -65,4 +67,8 @@ Route::prefix('/v1/stats')->middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/project/endpoint_method/{slug}', [QueriesProjectApi::class, 'stats_project_endpoint_method']);
     Route::get('/project/activity/{slug}', [QueriesProjectApi::class, 'stats_project_activity']);
+});
+
+Route::prefix('/v1/dictionary')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/variable', [QueriesDctApi::class, 'get_my_variable']);
 });
