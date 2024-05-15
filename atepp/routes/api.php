@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\Auth\Queries as QueryAuthApi;
 use App\Http\Controllers\Api\Comment\Queries as QueriesCommentApi;
 
 use App\Http\Controllers\Api\Dictionary\Queries as QueriesDctApi;
+use App\Http\Controllers\Api\Dictionary\Commands as CommandDctApi;
 
 ######################### Public Route #########################
 
@@ -71,4 +72,6 @@ Route::prefix('/v1/stats')->middleware(['auth:sanctum'])->group(function () {
 
 Route::prefix('/v1/dictionary')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/variable', [QueriesDctApi::class, 'get_my_variable']);
+
+    Route::post('/variable', [CommandDctApi::class, 'post_dictionary']);
 });
