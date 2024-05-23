@@ -4,6 +4,7 @@
             <option selected>-</option>
             <option value="1">Response Time : Must be ... than ...</option>
             <option value="2">Response Status : Must be equal to ...</option>
+            <option value="3">Response Object : Key ... must exist</option>
         </select>
         <label for="floatingSelect">Tests Snippet</label>
     </div>
@@ -56,6 +57,19 @@
                         <div class="d-flex justify-content-start">
                             <h6 class="my-1">Response Status : Must be equal to </h6>
                             <input id="test-value-1" class="form-control my-0 mx-1 py-0 px-1 text-center" style="width: 90px;" type="number" min="100" max="999">
+                        </div>
+                        <div class="test-result-holder"></div>
+                    </div>
+                `)
+            } else if(selected_test == "3"){
+                $('#test_holder').append(`
+                    <div class="test-holder-box">
+                        <input hidden value="${selected_test}" id="test-type-holder">
+                        <h6 class="fw-bold">Test #1</h6>
+                        <div class="d-flex justify-content-start">
+                            <h6 class="my-1">Response Object : Key </h6>
+                            <input id="test-value-1" class="form-control my-0 mx-1 py-0 px-1 text-center" style="width: 200px;" type="text">
+                            <h6 class="my-1">must exist</h6>
                         </div>
                         <div class="test-result-holder"></div>
                     </div>

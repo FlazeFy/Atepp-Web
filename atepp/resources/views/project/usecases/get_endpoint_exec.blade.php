@@ -105,14 +105,14 @@
                                     testParam: testParam,
                                     testVal: testVal
                                 })
-                            } else if(testType == "2"){
+                            } else if(testType == "2" || testType == "3"){
                                 const testVal = $(this).find('#test-value-1').val()
 
                                 test_template.push({
-                                    type: "2",
+                                    type: testType,
                                     testVal: testVal
                                 })
-                            }
+                            } 
                         });
                     } 
                 })
@@ -194,6 +194,31 @@
                                         <div class="col-6">
                                             <h6 class="fw-bold">Result</h6>
                                             <a>${status}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `)
+                        } else if(el.type == "3"){
+                            let status_test = "Failed"
+                            let validate_key = checkKeyInJson(JSON.stringify(response), el.testVal)
+
+                            if(validate_key == true){
+                                status_test = "Passed"
+                            }
+
+                            const holderBox = $('.test-holder-box').eq(index)
+                            const resultHolder = holderBox.find('.test-result-holder').eq(0)
+                            resultHolder.append(`
+                                <div class="alert alert-${status_test == "Passed" ? "success":"danger"}" role="alert">
+                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} ${status_test} with detail : </h6>
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <h6 class="fw-bold">Expect</h6>
+                                            <a>Key ${el.testVal} in object</a><br>
+                                        </div>
+                                        <div class="col-6">
+                                            <h6 class="fw-bold">Result</h6>
+                                            <a>${validate_key}</a>
                                         </div>
                                     </div>
                                 </div>

@@ -25,6 +25,7 @@
         <!-- JS Collection -->
         <script src="{{ asset('/js/converter.js')}}"></script>
         <script src="{{ asset('/js/generator.js')}}"></script>
+        <script src="{{ asset('/js/validator.js')}}"></script>
         <script src="{{ asset('/js/form.js')}}"></script>
 
         <!--Apex Chart-->
