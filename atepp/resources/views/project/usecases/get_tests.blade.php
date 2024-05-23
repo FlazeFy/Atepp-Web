@@ -3,6 +3,7 @@
         <select class="form-select" id="type_test" aria-label="Floating label select example">
             <option selected>-</option>
             <option value="1">Response Time : Must be ... than ...</option>
+            <option value="2">Response Status : Must be equal to ...</option>
         </select>
         <label for="floatingSelect">Tests Snippet</label>
     </div>
@@ -43,6 +44,18 @@
                             <h6 class="my-1 mx-1">Than</h6>
                             <input id="test-value-1" class="form-control my-0 mx-1 py-0 px-1 text-center" style="width: 90px;" type="number" min="1">
                             <h6 class="my-1"> ms</h6>
+                        </div>
+                        <div class="test-result-holder"></div>
+                    </div>
+                `)
+            } else if(selected_test == "2"){
+                $('#test_holder').append(`
+                    <div class="test-holder-box">
+                        <input hidden value="${selected_test}" id="test-type-holder">
+                        <h6 class="fw-bold">Test #1</h6>
+                        <div class="d-flex justify-content-start">
+                            <h6 class="my-1">Response Status : Must be equal to </h6>
+                            <input id="test-value-1" class="form-control my-0 mx-1 py-0 px-1 text-center" style="width: 90px;" type="number" min="100" max="999">
                         </div>
                         <div class="test-result-holder"></div>
                     </div>
