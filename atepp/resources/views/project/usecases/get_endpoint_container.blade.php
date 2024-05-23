@@ -15,7 +15,7 @@
         <a class="nav-link tabs" href="#">Script</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link tabs" href="#">Tests</a>
+        <a class="nav-link tabs" onclick="navigate_tab('tests')">Tests</a>
     </li>
     <li class="nav-item">
         <a class="nav-link tabs" href="#">Dummy</a>
@@ -33,6 +33,12 @@
 <script>
     navigate_tab()
     function navigate_tab(tab){
+        $('.tabs_content_holder').each(function() {
+            $(this).css({
+                'display':'none'
+            });
+        });
+
         $(`#tabs_${tab}`).css({
             'display':'block'
         })

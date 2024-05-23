@@ -210,3 +210,14 @@ hr {
     font-weight: 600 !important;
     font-size: var(--textJumbo);
 }
+
+.alert-success {
+    background-color:rgba(0, 160, 37, 0.7);
+    margin-top: var(--spaceMD);
+    border: 1.5px solid var(--whiteColor);
+}
+.alert-danger {
+    background-color:rgba(244, 59, 65, 0.7);
+    margin-top: var(--spaceMD);
+    border: 1.5px solid var(--whiteColor);
+}

@@ -58,7 +58,6 @@
         $('#tb_variable').append(`
             <tr>
                 <td>
-                    <form id="form-add-var" class="d-block">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="dictionary_name" name="dictionary_name" required>
                         <label for="floatingInput">Variable Name</label>
@@ -69,9 +68,8 @@
                         <input type="text" class="form-control" id="dictionary_value" name="dictionary_value">
                         <label for="floatingInput">Value</label>
                     </div>
-                    </form>
                 </td>
-                <td><a class="btn btn-danger">Cancel</a></td>
+                <td><a class="btn btn-danger" onclick="get_my_variable()">Cancel</a></td>
                 <td><a class="btn btn-success" onclick="submit_var()">Save</a></td>
             </tr>
         `)
@@ -81,14 +79,17 @@
         $.ajax({
             url: `http://127.0.0.1:8000/api/v1/dictionary/variable`,
             type: 'POST',
-            data: $('#form-add-var').serialize(),
+            data: {
+                dictionary_name: $('#dictionary_name').val(),
+                dictionary_value: $('#dictionary_value').val()
+            },
             dataType: 'json',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Accept", "application/json");
                 xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");    
             },
             success: function(response) {
-                location.reload()
+                get_my_variable()
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
                 var errorMessage = "Unknown error occurred"

@@ -67,12 +67,16 @@
         const response_box = document.getElementById('response_box')
         const status_code_box = document.getElementById('response_status_code')
         const time_box = document.getElementById('response_time')
+        let is_tested = false
+        let test_template = []
 
         response_box.innerHTML = '... Loading ...'
         status_code_box.innerHTML = '...'
         time_box.innerHTML = '... ms'
 
         const startTime = performance.now()
+
+       
 
         $.ajax({
             url: url,
@@ -85,6 +89,26 @@
                         xhr.setRequestHeader("Authorization", `Bearer ${$('#bearer_token_auth').val()}`);
                     }
                 }
+
+                $(document).ready(function() {
+                    if ($('#test_holder').children().length > 0) {
+                        is_tested = true
+                        $('#test_holder .test-holder-box').each(function() {
+                            const testType = $(this).find('#test-type-holder').val()
+
+                            if(testType == "1"){
+                                const testParam = $(this).find('#test-param-1').val()
+                                const testVal = $(this).find('#test-value-1').val()
+
+                                test_template.push({
+                                    type: "1",
+                                    testParam: testParam,
+                                    testVal: testVal
+                                })
+                            }
+                        });
+                    } 
+                })
             },
             success: function(response, textStatus, jqXHR) {
                 // Response body
@@ -111,6 +135,45 @@
                     time_box_color = 'bg-warning'
                 }
                 time_box.innerHTML = `<span class='${time_box_color} px-3 ms-2 py-1 rounded-pill'>${timeTaken.toFixed(2)} ms</span>`
+
+                // Test
+                if(is_tested == true){
+                    test_template.forEach((el, index) => {
+                        if(el.type == "1"){
+                            let status_test = "Failed"
+                            if(el.testParam == ">="){
+                                if(timeTaken >= el.testVal){
+                                    status_test = "Passed"
+                                } 
+                            } else if(el.testParam == "<="){
+                                if(timeTaken <= el.testVal) {
+                                    status_test = "Passed"
+                                }
+                            }
+
+                            $(document).ready(function() {
+                                $('.test-holder-box').each(function() {
+                                    const resultHolder = $(this).find('.test-result-holder').eq(index)
+                                    resultHolder.append(`
+                                        <div class="alert alert-${status_test == "Passed" ? "success":"danger"}" role="alert">
+                                            <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} ${status_test} with detail : </h6>
+                                            <div class="row mt-2">
+                                                <div class="col-6">
+                                                    <h6 class="fw-bold">Expect</h6>
+                                                    <a>${el.testParam} ${el.testVal} ms</a><br>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h6 class="fw-bold">Result</h6>
+                                                    <a>${timeTaken.toFixed(2)} ms</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `)
+                                });
+                            })
+                        }
+                    });
+                }
                 
                 // Environment
                 const env = navigator.userAgent

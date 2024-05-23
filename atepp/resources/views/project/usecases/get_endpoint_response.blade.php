@@ -8,12 +8,14 @@
 <div class="container w-100 p-3 position-absolute" style="min-height:75vh;">
     <div class="row">
         <div class="col">
-            <h1 class="fw-bold">Params</h1>
-            <div id="tabs_authorization" style="">
+            <div class="tabs_content_holder" id="tabs_authorization" style="display:none;">
                 @include('project.usecases.get_authorization')
             </div>
-            <div id="tabs_history" style="display:none;">
+            <div class="tabs_content_holder" id="tabs_history" style="display:none;">
                 @include('project.usecases.get_history')
+            </div>
+            <div class="tabs_content_holder" id="tabs_tests" style="display:none;">
+                @include('project.usecases.get_tests')
             </div>
         </div>
         <div class="col">
