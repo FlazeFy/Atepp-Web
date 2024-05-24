@@ -5,6 +5,7 @@
             <option value="1">Response Time : Must be ... than ...</option>
             <option value="2">Response Status : Must be equal to ...</option>
             <option value="3">Response Object : Key ... must exist</option>
+            <option value="4">Response Object : Key ... must be ...</option>
         </select>
         <label for="floatingSelect">Tests Snippet</label>
     </div>
@@ -70,6 +71,28 @@
                             <h6 class="my-1">Response Object : Key </h6>
                             <input id="test-value-1" class="form-control my-0 mx-1 py-0 px-1 text-center" style="width: 200px;" type="text">
                             <h6 class="my-1">must exist</h6>
+                        </div>
+                        <div class="test-result-holder"></div>
+                    </div>
+                `)
+            } else if(selected_test == "4"){
+                $('#test_holder').append(`
+                    <div class="test-holder-box">
+                        <input hidden value="${selected_test}" id="test-type-holder">
+                        <h6 class="fw-bold">Test #1</h6>
+                        <div class="d-flex justify-content-start">
+                            <h6 class="my-1">Response Object : Key </h6>
+                            <input id="test-param-1" class="form-control my-0 mx-1 py-0 px-1 text-center" style="width: 200px;" type="text">
+                            <h6 class="my-1">must be</h6>
+                            <select id="test-value-1" class="form-select my-0 mx-1 py-0 px-1 text-center" style="width: 100px;" aria-label="Default select example">
+                                <option value="null">Empty</option>
+                                <option value="any">Filled</option>
+                                <option value="string">String</option>
+                                <option value="number">Number</option>
+                                <option value="object">Object</option>
+                                <option value="array">Array</option>
+                                <option value="boolean">Boolean</option>
+                            </select>
                         </div>
                         <div class="test-result-holder"></div>
                     </div>
