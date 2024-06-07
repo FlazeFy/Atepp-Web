@@ -7,6 +7,7 @@
         </div>
         <div class="col-lg-9 position-relative">
             @include('profile.section.profile')
+            @include('profile.section.monitoring')
         </div>
     </div>
 @endsection

@@ -8,6 +8,7 @@ use App\Http\Controllers\WorkingSpaceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DummyController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MonitoringController;
 
 Route::prefix('/')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');

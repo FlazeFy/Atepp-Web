@@ -25,6 +25,8 @@ use App\Http\Controllers\Api\Dictionary\Commands as CommandDctApi;
 
 use App\Http\Controllers\Api\User\Queries as QueriesUserApi;
 
+use App\Http\Controllers\Api\Bot\Queries as QueriesBotApi;
+
 ######################### Public Route #########################
 
 Route::post('/v1/login', [CommandAuthApi::class, 'login']);
@@ -80,4 +82,6 @@ Route::prefix('/v1/dictionary')->middleware(['auth:sanctum'])->group(function ()
 
 Route::prefix('/v1/user')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [QueriesUserApi::class, 'get_my_profile']);
+    
+    Route::get('/service', [QueriesBotApi::class, 'get_my_service']);
 });
