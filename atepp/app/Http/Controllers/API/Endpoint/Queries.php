@@ -48,6 +48,24 @@ class Queries extends Controller
         }
     }
 
+    public function get_endpoint_by_project_slug($slug)
+    {
+        try{
+            $res = EndpointModel::get_endpoint_by_project_slug($slug);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'endpoint fetched',
+                'data' => $res
+            ], Response::HTTP_OK);
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public function get_top_ten_endpoint_ctx($ctx)
     {
         try{

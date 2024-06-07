@@ -41,6 +41,7 @@ Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/detail', [QueriesProjectApi::class, 'get_all_project_dashboard']);
 
     Route::get('/endpoint/list', [QueriesEndpointApi::class, 'get_all_endpoint']);
+    Route::get('/endpoint/project/{slug}', [QueriesEndpointApi::class, 'get_endpoint_by_project_slug']);
     Route::get('/endpoint/folder/{slug}', [QueriesEndpointApi::class, 'get_endpoint_by_folder_slug']);
     Route::get('/endpoint/top/{ctx}', [QueriesEndpointApi::class, 'get_top_ten_endpoint_ctx']);
 
@@ -82,6 +83,6 @@ Route::prefix('/v1/dictionary')->middleware(['auth:sanctum'])->group(function ()
 
 Route::prefix('/v1/user')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [QueriesUserApi::class, 'get_my_profile']);
-    
+
     Route::get('/service', [QueriesBotApi::class, 'get_my_service']);
 });

@@ -84,3 +84,23 @@ function checkKeyValueInJson(jsonString, key, dataType) {
         return false
     }
 }
+
+function checkKeyMustContainValueInJson(jsonString, key, values) {
+    try {
+        const dataArray = JSON.parse(jsonString)
+        if (!Array.isArray(dataArray)) {
+            throw new Error("The provided JSON string does not represent an array.")
+        }
+        const result = dataArray.some(item => {
+            if (typeof item !== 'object' || item[key] === undefined) {
+                return false
+            }
+            const itemValue = item[key]
+            return values.some(value => itemValue.includes(value))
+        })
+        return result
+    } catch (error) {
+        console.error("Error processing JSON:", error)
+        return false
+    }
+}

@@ -112,6 +112,20 @@
                                     type: testType,
                                     testVal: testVal
                                 })
+                            } else if(testType == "5"){
+                                const testParam = $(this).find('#test-param-1').val()
+                                let testVal = []
+                                $( document ).ready(function() {
+                                    $(".test_5_value").each(function() {
+                                        testVal.push($(this).val())
+                                    })
+                                })
+
+                                test_template.push({
+                                    type: testType,
+                                    testParam: testParam,
+                                    testVal: testVal
+                                })
                             } 
                         });
                     } 
@@ -248,6 +262,31 @@
                                     </div>
                                 </div>
                             `)
+                        } else if(el.type == "5"){
+                            let status_test = "Failed"
+                            let validate_key = checkKeyMustContainValueInJson(JSON.stringify(response), el.testParam, el.testVal)
+
+                            if(validate_key == true){
+                                status_test = "Passed"
+                            }
+
+                            const holderBox = $('.test-holder-box').eq(index)
+                            const resultHolder = holderBox.find('.test-result-holder').eq(0)
+                            resultHolder.append(`
+                                <div class="alert alert-${status_test == "Passed" ? "success":"danger"}" role="alert">
+                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} ${status_test} with detail : </h6>
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <h6 class="fw-bold">Expect</h6>
+                                            <a>Key ${el.testParam} have one of ${el.testVal}</a><br>
+                                        </div>
+                                        <div class="col-6">
+                                            <h6 class="fw-bold">Result</h6>
+                                            <a>${validate_key}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `)
                         }
                     });
                 }
@@ -258,18 +297,18 @@
                 response_box.appendChild(pre)
 
                 // Save endpoint
-                check_endpoint_url(url)
-                .then(data => {
-                    let id = document.getElementById('endpoint_id').value
+                // check_endpoint_url(url)
+                // .then(data => {
+                //     let id = document.getElementById('endpoint_id').value
 
-                    if(!data){
-                        post_endpoint(method, url)
-                    } 
-                    post_response_history(id, status, method, timeTaken, JSON.stringify(response), env)
-                })
-                .catch(error => {
-                    alert('API error:', error);
-                })
+                //     if(!data){
+                //         post_endpoint(method, url)
+                //     } 
+                //     post_response_history(id, status, method, timeTaken, JSON.stringify(response), env)
+                // })
+                // .catch(error => {
+                //     alert('API error:', error);
+                // })
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
                 // Do someting

@@ -46,6 +46,17 @@ class EndpointModel extends Model
         return $res;
     }
 
+    public static function get_endpoint_by_project_slug($slug){
+        $res = EndpointModel::select('endpoint.id','endpoint_name', 'endpoint_desc', 'endpoint_url', 'endpoint_method', 'folder_name')
+            ->leftjoin('folder','folder.id','=','endpoint.folder_id')
+            ->join('project','project.id','=','endpoint.project_id')
+            ->where('project_slug', $slug)
+            ->orderBy('folder_name', 'desc')
+            ->get();
+
+        return $res;
+    }
+
     public static function get_endpoint_by_response_time($ctx){
         $res = EndpointModel::selectRaw('endpoint.id,endpoint_name,endpoint_desc,endpoint_url,response_method,ROUND(response_time,2) as response_time,response.created_at')
             ->join('response','response.endpoint_id','=','endpoint.id');

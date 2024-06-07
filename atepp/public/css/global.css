@@ -121,7 +121,7 @@ label {
     border-left: calc(var(--spaceMini) / 1.25) solid var(--whiteColor);
 }
 
-.nav-link, .dropdown-item, button, a, .btn-endpoint, .cell {
+.nav-link, .dropdown-item, button, a, .btn-endpoint, .cell, .btn-test-value {
     -webkit-transition: all 0.35s;
     -o-transition: all 0.35s;
     transition: all 0.35s;
