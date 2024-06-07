@@ -16,4 +16,7 @@ class UserModel extends Authenticatable
     protected $table = 'user';
     protected $primaryKey = 'id';
     protected $fillable = ['id', 'username', 'password', 'email', 'phone', 'company', 'social_media', 'job', 'account_type', 'created_at', 'updated_at'];
+    protected $casts = [
+        'social_media' => 'array'
+    ];
 }

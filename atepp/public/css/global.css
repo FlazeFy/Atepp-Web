@@ -175,6 +175,11 @@ hr {
     cursor: pointer;
     text-decoration: underline !important;
 }
+.btn-socmed {
+    background: var(--infoBG);
+    margin-left: var(--spaceXSM);
+    margin-right: 0;
+}
 
 .apexcharts-legend-text {
     color: var(--whiteColor) !important;
@@ -211,13 +216,16 @@ hr {
     font-size: var(--textJumbo);
 }
 
-.alert-success {
-    background-color:rgba(0, 160, 37, 0.7);
+.alert-success, .alert-danger, .alert-warning {
     margin-top: var(--spaceMD);
     border: 1.5px solid var(--whiteColor);
 }
+.alert-success {
+    background-color:rgba(0, 160, 37, 0.7);  
+}
 .alert-danger {
     background-color:rgba(244, 59, 65, 0.7);
-    margin-top: var(--spaceMD);
-    border: 1.5px solid var(--whiteColor);
+}
+.alert-warning {
+    background-color:rgba(255, 203, 46, 0.7);
 }

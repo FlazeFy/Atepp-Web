@@ -27,6 +27,7 @@
         <script src="{{ asset('/js/generator.js')}}"></script>
         <script src="{{ asset('/js/validator.js')}}"></script>
         <script src="{{ asset('/js/form.js')}}"></script>
+        <script src="{{ asset('/js/typography.js')}}"></script>
 
         <!--Apex Chart-->
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

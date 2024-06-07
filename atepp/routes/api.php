@@ -23,6 +23,8 @@ use App\Http\Controllers\Api\Comment\Queries as QueriesCommentApi;
 use App\Http\Controllers\Api\Dictionary\Queries as QueriesDctApi;
 use App\Http\Controllers\Api\Dictionary\Commands as CommandDctApi;
 
+use App\Http\Controllers\Api\User\Queries as QueriesUserApi;
+
 ######################### Public Route #########################
 
 Route::post('/v1/login', [CommandAuthApi::class, 'login']);
@@ -74,4 +76,8 @@ Route::prefix('/v1/dictionary')->middleware(['auth:sanctum'])->group(function ()
     Route::get('/variable', [QueriesDctApi::class, 'get_my_variable']);
 
     Route::post('/variable', [CommandDctApi::class, 'post_dictionary']);
+});
+
+Route::prefix('/v1/user')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/', [QueriesUserApi::class, 'get_my_profile']);
 });

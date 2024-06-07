@@ -50,10 +50,6 @@
             ";
         }
     ?>
-
-    .apexcharts-heatmap-rect {
-        stroke:transparent !important;
-    }
 </style>
 
 @if(session()->get('comment_mode_key') == true)
@@ -529,8 +525,11 @@
                     },
                 ],
                 chart: {
-                    height: 350,
-                    type: 'heatmap'
+                    height: 250,
+                    type: 'heatmap',
+                    toolbar: {
+                        show: false
+                    },
                 },
                 dataLabels: {
                     enabled: false,
@@ -544,30 +543,10 @@
                             let month = date.toLocaleString('default', { month: 'short' })
                             let weekNumber = Math.ceil(date.getDate() / 7)
 
-                            return `${month} W-${weekNumber}`
-                        },
-                        style: {
-                            colors: '#FFF'
-                        }
-                    }
-                },
-                yaxis : {
-                    labels : {
-                        formatter: function (value) {
-                            if (value == 'Sunday') {
-                                return 'Saturday'
-                            } else if (value == 'Monday') {
-                                return 'Sunday'
-                            } else if (value == 'Tuesday') {
-                                return 'Monday'
-                            } else if (value == 'Wednesday') {
-                                return 'Tuesday'
-                            } else if (value == 'Thursday') {
-                                return 'Wednesday'
-                            } else if (value == 'Friday') {
-                                return 'Thursday'
-                            } else if (value == 'Saturday') {
-                                return 'Friday'
+                            if(weekNumber == 1){
+                                return `${month}`
+                            } else {
+                                return ``
                             }
                         },
                         style: {
@@ -575,8 +554,48 @@
                         }
                     }
                 },
-                toolbar: {
-                    show: false, // still show
+                plotOptions: {
+                    heatmap: {
+                        shadeIntensity: 0.5,
+                        colorScale: {
+                            ranges: [{
+                                from: 0,
+                                to: 0,
+                                color: '#121725'
+                            }]
+                        },
+                        stroke: {
+                            width: 2, 
+                            colors: ['#000000'] 
+                        }
+                    }
+                },
+                legend: {
+                    show: false
+                },
+                yaxis : {
+                    labels : {
+                        formatter: function (value) {
+                            if (value == 'Sunday') {
+                                return 'Sat'
+                            } else if (value == 'Monday') {
+                                return 'Sun'
+                            } else if (value == 'Tuesday') {
+                                return 'Mon'
+                            } else if (value == 'Wednesday') {
+                                return 'Tue'
+                            } else if (value == 'Thursday') {
+                                return 'Wed'
+                            } else if (value == 'Friday') {
+                                return 'Thu'
+                            } else if (value == 'Saturday') {
+                                return 'Fri'
+                            }
+                        },
+                        style: {
+                            colors: '#FFF'
+                        }
+                    }
                 },
                 tooltip: {
                     x: {

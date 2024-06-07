@@ -7,6 +7,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\WorkingSpaceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DummyController;
+use App\Http\Controllers\ProfileController;
 
 Route::prefix('/')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -30,4 +31,8 @@ Route::prefix('/workingspace')->group(function () {
 
 Route::prefix('/dummy')->group(function () {
     Route::get('/', [DummyController::class, 'index'])->name('dummy');
+});
+
+Route::prefix('/profile')->group(function () {
+    Route::get('/', [ProfileController::class, 'index'])->name('profile');
 });
