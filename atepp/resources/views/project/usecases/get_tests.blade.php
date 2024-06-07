@@ -153,7 +153,7 @@
 
             if(!found){
                 $("#test_5_item_show_value").prepend(`
-                    <a class='btn btn-test-value py-0 ms-1' title="Click to remove">${val}<input hidden class="test_5_value" type="text" value="${val}"></a>
+                    <a class='btn btn-test-value py-0 ms-1 mb-1' title="Click to remove">${val}<input hidden class="test_5_value" type="text" value="${val}"></a>
                 `)
             } else {
                 $("#test_5_add_value_msg").text(`Failed to add value. Its already on the list`)
@@ -162,4 +162,10 @@
 
         $("#test_5_item_add_value").val('')
     }
+
+    $(document).ready(function() {
+        $(document).on("click", ".btn-test-value", function() {
+            $(this).remove()
+        })
+    })
 </script>

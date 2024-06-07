@@ -239,11 +239,13 @@
                             `)
                         } else if(el.type == "4"){
                             let status_test = "Failed"
+                            alert(el.testParam)
                             let validate_key = checkKeyValueInJson(JSON.stringify(response), el.testParam, el.testVal)
 
                             if(validate_key == true){
                                 status_test = "Passed"
                             }
+                            
 
                             const holderBox = $('.test-holder-box').eq(index)
                             const resultHolder = holderBox.find('.test-result-holder').eq(0)
@@ -297,18 +299,18 @@
                 response_box.appendChild(pre)
 
                 // Save endpoint
-                // check_endpoint_url(url)
-                // .then(data => {
-                //     let id = document.getElementById('endpoint_id').value
+                check_endpoint_url(url)
+                .then(data => {
+                    let id = document.getElementById('endpoint_id').value
 
-                //     if(!data){
-                //         post_endpoint(method, url)
-                //     } 
-                //     post_response_history(id, status, method, timeTaken, JSON.stringify(response), env)
-                // })
-                // .catch(error => {
-                //     alert('API error:', error);
-                // })
+                    if(!data){
+                        post_endpoint(method, url)
+                    } 
+                    post_response_history(id, status, method, timeTaken, JSON.stringify(response), env)
+                })
+                .catch(error => {
+                    alert('API error:', error);
+                })
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
                 // Do someting

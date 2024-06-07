@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\Dictionary\Queries as QueriesDctApi;
 use App\Http\Controllers\Api\Dictionary\Commands as CommandDctApi;
 
 use App\Http\Controllers\Api\User\Queries as QueriesUserApi;
+use App\Http\Controllers\Api\User\Commands as CommandsUserApi;
 
 use App\Http\Controllers\Api\Bot\Queries as QueriesBotApi;
 
@@ -85,4 +86,6 @@ Route::prefix('/v1/user')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [QueriesUserApi::class, 'get_my_profile']);
 
     Route::get('/service', [QueriesBotApi::class, 'get_my_service']);
+
+    Route::put('/edit_profile', [CommandsUserApi::class, 'edit_profile']);
 });

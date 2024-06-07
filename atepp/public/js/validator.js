@@ -87,11 +87,8 @@ function checkKeyValueInJson(jsonString, key, dataType) {
 
 function checkKeyMustContainValueInJson(jsonString, key, values) {
     try {
-        const dataArray = JSON.parse(jsonString)
-        if (!Array.isArray(dataArray)) {
-            throw new Error("The provided JSON string does not represent an array.")
-        }
-        const result = dataArray.some(item => {
+        const data = JSON.parse(jsonString)
+        const result = data.data.every(item => {
             if (typeof item !== 'object' || item[key] === undefined) {
                 return false
             }

@@ -4,31 +4,39 @@
             <h6 class="mb-2"><i class="fa-solid fa-circle-info"></i> Info</h6>
             <a>You can only update username, email address, company, and job for 3 times a day</a>
         </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label text-white">Username</label>
-            <input type="text" name="username" id="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <a class="error_input" id="username_msg"></a>
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label text-white">Email Address</label>
-            <input type="email" name="email" id="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <a class="error_input" id="email_msg"></a>
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label text-white">Company</label>
-            <input type="text" name="company" id="company" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <a class="error_input" id="company_msg"></a>
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label text-white">Social Media</label>
-            <div class="border rounded py-2" style="min-height: 40px;" id="social_media_holder"></div>
-            <a class="error_input" id="social_media_msg"></a>
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label text-white">Job</label>
-            <input type="text" name="job" id="job" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <a class="error_input" id="job_msg"></a>
-        </div>
+        <form id="form-update-user-profile">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label text-white">Username</label>
+                <input type="text" name="username" id="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <a class="error_input" id="username_msg"></a>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label text-white">Email Address</label>
+                <input type="email" name="email" id="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <a class="error_input" id="email_msg"></a>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label text-white">Phone Number</label>
+                <input type="phone" name="phone" id="phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <a class="error_input" id="phone_msg"></a>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label text-white">Company</label>
+                <input type="text" name="company" id="company" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <a class="error_input" id="company_msg"></a>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label text-white">Social Media</label>
+                <div class="border rounded py-2" style="min-height: 40px;" id="social_media_holder"></div>
+                <a class="error_input" id="social_media_msg"></a>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label text-white">Job</label>
+                <input type="text" name="job" id="job" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <a class="error_input" id="job_msg"></a>
+            </div>
+            <div id="btn-edit-profile-holder"></div>
+        </form>
         <div class="mb-3">
             <div class="row">
                 <div class="col">
@@ -49,6 +57,12 @@
 
 <script>
     get_my_profile()
+    let username = ''
+    let email = ''
+    let company = ''
+    let job = ''
+    let phone = ''
+
     function get_my_profile() {
         res_time_total = 0
         $('#tb_variable').empty()
@@ -65,15 +79,23 @@
             .done(function (response) {
                 let data =  response.data
                 const socmeds = data.social_media
+                username = data.username
+                email = data.email
+                company = data.company
+                job = data.job
+                phone = data.phone
 
-                $('#username').val(data.username)
-                $('#email').val(data.email)
-                $('#company').val(data.company)
-                $('#job').val(data.job)
+                $('#username').val(username)
+                $('#email').val(email)
+                $('#company').val(company)
+                $('#job').val(job)
+                $('#phone').val(phone)
+
                 $('#created_at').text(get_date_to_context(data.created_at, 'calendar'))
                 $('#updated_at').text(get_date_to_context(data.updated_at, 'calendar'))
 
                 if(socmeds){
+                    $('#social_media_holder').empty()
                     socmeds.forEach((el,idx) => {
                         $('#social_media_holder').append(`
                             <a class='btn btn-socmed' data-bs-toggle="modal" data-bs-target="#socmed_${idx}_edit_modal"><i class="fa-brands fa-${el.socmed_name}"></i> ${ucFirst(el.socmed_name)}</a>
@@ -82,7 +104,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">Edit Social Media</h5>
-                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-circle-xmark"></i></button>
+                                            <a type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-circle-xmark"></i></a>
                                         </div>
                                         <div class="modal-body">
                                             <label for="exampleInputEmail1" class="form-label text-white">Platform</label>
@@ -101,7 +123,7 @@
                                                     el.socmed_name == "instagram" ? el.socmed_url.replace("https://www.instagram.com/","") : ""
                                                 }" aria-describedby="basic-addon3">
                                             </div>
-                                            <button class="btn btn-danger w-100 mt-3"><i class="fa-solid fa-trash"></i> Remove</button>
+                                            <a class="btn btn-danger w-100 mt-3"><i class="fa-solid fa-trash"></i> Remove</a>
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +138,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Add Social Media</h5>
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-circle-xmark"></i></button>
+                                    <a type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-circle-xmark"></i></a>
                                 </div>
                                 <div class="modal-body">
                                     <label for="exampleInputEmail1" class="form-label text-white">Platform</label>
@@ -139,5 +161,61 @@
             .fail(function (jqXHR, ajaxOptions, thrownError) {
                 // Do someting
             });
+    }
+
+    $(document).ready(function() {
+        $(document).on("input", "#username, #email, #company, #job", function() {
+            const newVal = $(this).val()
+            const id = $(this).attr('id')
+            let is_changed_username = false 
+            let is_changed_email = false 
+            let is_changed_company = false 
+            let is_changed_job = false 
+            let is_changed_phone = false 
+
+            if (id === 'username' && newVal !== username) {
+                is_changed_username = true
+            } else if (id === 'email' && newVal !== email) {
+                is_changed_email = true
+            } else if (id === 'company' && newVal !== company) {
+                is_changed_company = true
+            } else if (id === 'job' && newVal !== job) {
+                is_changed_job = true
+            } else if (id === 'phone' && newVal !== phone) {
+                is_changed_phone = true
+            }
+            
+            if(is_changed_username || is_changed_email || is_changed_company || is_changed_job || is_changed_phone){
+                $("#btn-edit-profile-holder").empty().append(`
+                    <a class="btn btn-primary w-100 my-3" onclick="edit_profile()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</a>
+                `)
+            } else {
+                $("#btn-edit-profile-holder").empty()
+            }
+        })
+    })
+
+    function edit_profile(){
+        $.ajax({
+            url: '/api/v1/user/edit_profile', 
+            type: 'PUT',
+            data: $('#form-update-user-profile').serialize(),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");    
+            },
+            success: function(response) {
+                get_my_profile()
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                var allMsg = null
+                var icon = `<i class='fa-solid fa-triangle-exclamation'></i> `
+
+                if(allMsg){
+                    $('#all_msg').html(icon + allMsg)
+                }
+            }
+        });
     }
 </script>
