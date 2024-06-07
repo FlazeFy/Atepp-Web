@@ -10,4 +10,10 @@ class Converter
         
         return $res;
     }
+
+    public static function to_two_digit_decimal($val) {
+        $res = ceil($val * 100) / 100;
+
+        return $res;
+    }
 }

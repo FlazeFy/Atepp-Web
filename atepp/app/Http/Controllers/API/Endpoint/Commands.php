@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\Endpoint;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 use App\Models\EndpointModel;
+use App\Models\BotModel;
 
 use App\Helpers\Generator;
 
@@ -34,6 +36,7 @@ class Commands extends Controller
     {
         try{
             $user_id = $request->user()->id;
+            $bots = BotModel::get_user_bots($user_id);
 
             $res = EndpointModel::create([
                 'id' => Generator::get_uuid(), 
@@ -48,6 +51,16 @@ class Commands extends Controller
                 'deleted_at' => null, 
                 'deleted_by' => null
             ]);
+
+            if($bots && $res){
+                foreach($bots as $dt){
+                    $response = Telegram::sendMessage([
+                        'chat_id' => $dt->bot_id,
+                        'text' => "Hello $dt->username, New endpoint has been added. This is the detail :\n\nURL : $request->endpoint_url\nMethod : $request->endpoint_method",
+                        'parse_mode' => 'HTML'
+                    ]);
+                }
+            }
 
             return response()->json([
                 'status' => 'success',

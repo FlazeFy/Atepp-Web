@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 use App\Models\FolderModel;
 use App\Models\ProjectModel;
 use App\Models\CommentModel;
+use App\Models\BotModel;
 
 use App\Helpers\Generator;
 use App\Helpers\Converter;
@@ -20,6 +22,7 @@ class Commands extends Controller
         try{
             $user_id = $request->user()->id;
             $id = Generator::get_uuid();
+            $bots = BotModel::get_user_bots($user_id);
 
             $res_project = ProjectModel::create([
                 'id' => $id, 
@@ -52,6 +55,16 @@ class Commands extends Controller
                 'deleted_at' => null, 
                 'deleted_by' => null
             ]);
+
+            if($bots && $res_project && $res_folder){
+                foreach($bots as $dt){
+                    $response = Telegram::sendMessage([
+                        'chat_id' => $dt->bot_id,
+                        'text' => "Hello $dt->username, New project has been created. It's called <b>$request->project_title</b>!",
+                        'parse_mode' => 'HTML'
+                    ]);
+                }
+            }
 
             return response()->json([
                 'status' => 'success',

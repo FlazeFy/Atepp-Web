@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 use App\Models\ResponseModel;
+use App\Models\BotModel;
+use App\Models\EndpointModel;
 
 use App\Helpers\Generator;
 use App\Helpers\Converter;
@@ -17,7 +20,8 @@ class Commands extends Controller
     {
         try{
             $user_id = $request->user()->id;
-
+            $bots = BotModel::get_user_bots($user_id);
+            
             $res = ResponseModel::create([
                 'id' => Generator::get_uuid(), 
                 'endpoint_id' => $request->endpoint_id, 
@@ -29,6 +33,23 @@ class Commands extends Controller
                 'created_at' => date('Y-m-d H:i:s'), 
                 'created_by' => $user_id, 
             ]);
+
+            if($bots && $res){
+                $endpoint = EndpointModel::select('endpoint_url')->where('id',$request->endpoint_id)->first();
+                $response_time = Converter::to_two_digit_decimal($request->response_time);
+                $responseBody = json_decode($request->response_body, true);
+                $prettyResponseBody = json_encode($responseBody, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $escapedResponseBody = htmlspecialchars($prettyResponseBody);
+                $formattedResponseBody = "<pre>{$escapedResponseBody}</pre>";
+
+                foreach($bots as $dt){
+                    $response = Telegram::sendMessage([
+                        'chat_id' => $dt->bot_id,
+                        'text' => "Hello $dt->username, You have run an endpoint. This is the detail :\n\nURL : $endpoint->endpoint_url\nMethod : $request->response_method\nStatus : $request->response_status\nTime Taken : $response_time ms\n\n<b>Body</b>\n$formattedResponseBody",
+                        'parse_mode' => 'HTML'
+                    ]);
+                }
+            }
 
             return response()->json([
                 'status' => 'success',
