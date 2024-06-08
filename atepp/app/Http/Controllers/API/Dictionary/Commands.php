@@ -78,4 +78,28 @@ class Commands extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function delete_dictionary(Request $request, $id) 
+    {
+        try{
+            $res = DictionaryModel::destroy($id);
+
+            if($res > 0){
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'dictionary deleted',
+                ], Response::HTTP_OK);
+            } else {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'dictionary failed to deleted',
+                ], Response::HTTP_NOT_FOUND);
+            }
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => $e->getMessage(),
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

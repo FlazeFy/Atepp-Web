@@ -81,6 +81,7 @@ Route::prefix('/v1/dictionary')->middleware(['auth:sanctum'])->group(function ()
 
     Route::post('/variable', [CommandDctApi::class, 'post_dictionary']);
     Route::put('/variable/{id}', [CommandDctApi::class, 'put_dictionary']);
+    Route::delete('/variable/{id}', [CommandDctApi::class, 'delete_dictionary']);
 });
 
 Route::prefix('/v1/user')->middleware(['auth:sanctum'])->group(function () {

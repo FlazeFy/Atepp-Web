@@ -70,6 +70,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <a class="fst-italic text-danger" style="font-size: var(--textMD);" id="all_msg_var_${i}"></a>
                                                     <div class="row">
                                                         <div class="col">
                                                             <a class="btn btn-danger w-100 py-2" onclick="delete_variable(${i})"><i class="fa-solid fa-trash"></i> Delete</a>
@@ -165,6 +166,7 @@
 
     function edit_variable(idx){
         const id = $(`#id_${idx}`).val()
+        $(`#all_msg_var_${i}`).empty()
         $.ajax({
             url: `http://127.0.0.1:8000/api/v1/dictionary/variable/${id}`,
             type: 'PUT',
@@ -197,7 +199,45 @@
                     allMsg = errorMessage
                 }
                 if(allMsg){
-                    $('#all_msg').html(icon + allMsg)
+                    $(`#all_msg_var_${i}`).html(icon + allMsg)
+                }
+            }
+        });
+    }
+
+    function delete_variable(idx){
+        const id = $(`#id_${idx}`).val()
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/v1/dictionary/variable/${id}`,
+            type: 'DELETE',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");    
+            },
+            success: function(response) {
+                $(`#manage_var_${idx}_modal`).modal('hide')
+                get_my_variable()
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                var errorMessage = "Unknown error occurred"
+                var allMsg = null
+                var icon = `<i class='fa-solid fa-triangle-exclamation'></i> `
+
+                if (response && response.responseJSON && response.responseJSON.hasOwnProperty('result')) {   
+                    //Error validation
+                    if(typeof response.responseJSON.result === "string"){
+                        allMsg = response.responseJSON.result
+                    } else {
+
+                    }
+                    
+                } else if(response && response.responseJSON && response.responseJSON.hasOwnProperty('errors')){
+                    allMsg = response.responseJSON.errors.result[0]
+                } else {
+                    allMsg = errorMessage
+                }
+                if(allMsg){
+                    $(`#all_msg_var_${i}`).html(icon + allMsg)
                 }
             }
         });
