@@ -80,6 +80,7 @@ Route::prefix('/v1/dictionary')->middleware(['auth:sanctum'])->group(function ()
     Route::get('/variable', [QueriesDctApi::class, 'get_my_variable']);
 
     Route::post('/variable', [CommandDctApi::class, 'post_dictionary']);
+    Route::put('/variable/{id}', [CommandDctApi::class, 'put_dictionary']);
 });
 
 Route::prefix('/v1/user')->middleware(['auth:sanctum'])->group(function () {

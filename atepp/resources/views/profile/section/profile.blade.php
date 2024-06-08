@@ -7,22 +7,22 @@
         <form id="form-update-user-profile">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label text-white">Username</label>
-                <input type="text" name="username" id="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="text" name="username" id="username" class="form-control" aria-describedby="emailHelp">
                 <a class="error_input" id="username_msg"></a>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label text-white">Email Address</label>
-                <input type="email" name="email" id="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="email" name="email" id="email" class="form-control" aria-describedby="emailHelp">
                 <a class="error_input" id="email_msg"></a>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label text-white">Phone Number</label>
-                <input type="phone" name="phone" id="phone" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="phone" name="phone" id="phone" class="form-control" aria-describedby="emailHelp">
                 <a class="error_input" id="phone_msg"></a>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label text-white">Company</label>
-                <input type="text" name="company" id="company" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="text" name="company" id="company" class="form-control" aria-describedby="emailHelp">
                 <a class="error_input" id="company_msg"></a>
             </div>
             <div class="mb-3">
@@ -32,7 +32,7 @@
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label text-white">Job</label>
-                <input type="text" name="job" id="job" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="text" name="job" id="job" class="form-control"  aria-describedby="emailHelp">
                 <a class="error_input" id="job_msg"></a>
             </div>
             <div id="btn-edit-profile-holder"></div>

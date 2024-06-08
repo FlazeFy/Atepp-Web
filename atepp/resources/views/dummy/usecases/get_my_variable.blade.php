@@ -36,7 +36,54 @@
                             <td>${data[i].dictionary_name}</td>
                             <td>${data[i].dictionary_value}</td>
                             <td>${get_date_to_context(data[i].created_at,'calendar')}</td>
-                            <td><a class="btn btn-primary"><i class="fa-solid fa-gear"></i> Manage</a></td>
+                            <td>
+                                <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#manage_var_${i}_modal"><i class="fa-solid fa-gear"></i> Manage</a>
+                                <div class="modal fade" id="manage_var_${i}_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Manage Variable</h5>
+                                                <a type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-circle-xmark"></i></a>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="form-edit-var-${i}">
+                                                    <input hidden name="id" value="${data[i].id}" id="id_${i}">
+                                                    <div class="mb-3">
+                                                        <label for="exampleInputEmail1" class="form-label text-white">Name</label>
+                                                        <input type="text" name="dictionary_name" id="dictionary_name_${i}" value="${data[i].dictionary_name}" class="form-control" aria-describedby="emailHelp">
+                                                        <a class="error_input" id="key_${i}_msg"></a>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="exampleInputEmail1" class="form-label text-white">Value</label>
+                                                        <input type="text" name="dictionary_value" id="dictionary_value_${i}" value="${data[i].dictionary_value}" class="form-control" aria-describedby="emailHelp">
+                                                        <a class="error_input" id="val_${i}_msg"></a>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label for="exampleInputEmail1" class="form-label text-white mb-0">Created At</label><br>
+                                                                <label for="exampleInputEmail1" class="form-label text-white fst-italic" style="font-size: var(--textXMD);" id="created_at_${i}">${get_date_to_context(data[i].created_at, 'calendar')}</label>
+                                                            </div>
+                                                            <div class="col text-end">
+                                                                <label for="exampleInputEmail1" class="form-label text-white mb-0">Last Update</label><br>
+                                                                <label for="exampleInputEmail1" class="form-label text-white fst-italic" style="font-size: var(--textXMD);" id="updated_at_${i}">${get_date_to_context(data[i].updated_at, 'calendar')}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <a class="btn btn-danger w-100 py-2" onclick="delete_variable(${i})"><i class="fa-solid fa-trash"></i> Delete</a>
+                                                        </div>
+                                                        <div class="col text-end">
+                                                            <a class="btn btn-primary w-100 py-2" onclick="edit_variable(${i})"><i class="fa-solid fa-floppy-disk"></i> Save Changes</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     `)
                 }
@@ -89,6 +136,46 @@
                 xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");    
             },
             success: function(response) {
+                get_my_variable()
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                var errorMessage = "Unknown error occurred"
+                var allMsg = null
+                var icon = `<i class='fa-solid fa-triangle-exclamation'></i> `
+
+                if (response && response.responseJSON && response.responseJSON.hasOwnProperty('result')) {   
+                    //Error validation
+                    if(typeof response.responseJSON.result === "string"){
+                        allMsg = response.responseJSON.result
+                    } else {
+
+                    }
+                    
+                } else if(response && response.responseJSON && response.responseJSON.hasOwnProperty('errors')){
+                    allMsg = response.responseJSON.errors.result[0]
+                } else {
+                    allMsg = errorMessage
+                }
+                if(allMsg){
+                    $('#all_msg').html(icon + allMsg)
+                }
+            }
+        });
+    }
+
+    function edit_variable(idx){
+        const id = $(`#id_${idx}`).val()
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/v1/dictionary/variable/${id}`,
+            type: 'PUT',
+            data: $(`#form-edit-var-${idx}`).serialize(),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");    
+            },
+            success: function(response) {
+                $(`#manage_var_${idx}_modal`).modal('hide')
                 get_my_variable()
             },
             error: function(response, jqXHR, textStatus, errorThrown) {

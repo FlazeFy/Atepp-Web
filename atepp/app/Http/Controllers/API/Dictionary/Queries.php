@@ -15,7 +15,7 @@ class Queries extends Controller
         try{
             $user_id = $request->user()->id;
 
-            $res = DictionaryModel::select('id','dictionary_name','dictionary_value','created_at')
+            $res = DictionaryModel::select('id','dictionary_name','dictionary_value','created_at','updated_at')
                 ->where('dictionary_type','variable')
                 ->where('created_by',$user_id)
                 ->paginate(20);

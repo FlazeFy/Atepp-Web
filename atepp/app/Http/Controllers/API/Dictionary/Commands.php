@@ -16,21 +16,61 @@ class Commands extends Controller
     {
         try{
             $user_id = $request->user()->id;
+            $check = DictionaryModel::get_availability_dct($request->dictionary_name,'variable',$user_id,null,'create');
 
-            $res = DictionaryModel::create([
-                'id' => Generator::get_uuid(), 
-                'dictionary_type' => 'variable', 
-                'dictionary_name' => $request->dictionary_name, 
-                'dictionary_value'  => $request->dictionary_value, 
-                'created_at' => date('Y-m-d H:i:s'), 
-                'created_by' => $user_id, 
-            ]);
+            if(!$check){
+                $res = DictionaryModel::create([
+                    'id' => Generator::get_uuid(), 
+                    'dictionary_type' => 'variable', 
+                    'dictionary_name' => $request->dictionary_name, 
+                    'dictionary_value'  => $request->dictionary_value, 
+                    'created_at' => date('Y-m-d H:i:s'), 
+                    'created_by' => $user_id, 
+                ]);
 
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'dictionary created',
+                    'data' => $res
+                ], Response::HTTP_OK);
+            } else {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'dictionary failed to created',
+                ], Response::HTTP_CONFLICT);
+            }
+        } catch(\Exception $e) {
             return response()->json([
-                'status' => 'success',
-                'message' => 'dictionary created',
-                'data' => $res
-            ], Response::HTTP_OK);
+                'status' => $e->getMessage(),
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function put_dictionary(Request $request, $id) 
+    {
+        try{
+            $user_id = $request->user()->id;
+            $check = DictionaryModel::get_availability_dct($request->dictionary_name,'variable',$user_id,$id,'update');
+
+            if(!$check){
+                $res = DictionaryModel::where('id',$id)
+                ->update([
+                    'dictionary_name' => $request->dictionary_name, 
+                    'dictionary_value'  => $request->dictionary_value, 
+                    'updated_at' => date('Y-m-d H:i:s'), 
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'dictionary updated',
+                ], Response::HTTP_OK);
+            } else {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'dictionary failed to updated',
+                ], Response::HTTP_CONFLICT);
+            }
         } catch(\Exception $e) {
             return response()->json([
                 'status' => $e->getMessage(),
