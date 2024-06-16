@@ -235,3 +235,11 @@ hr {
     border: 3px solid var(--primaryColor);
     color: var(--whiteColor);
 }
+.bg-response-body {
+    background: var(--darkColor);
+    padding: var(--spaceLG);
+    min-height: 73vh;
+    border: 1.5px solid var(--hoverBG);
+    margin-right: var(--spaceXSM);
+    border-radius: var(--roundedMD);
+}

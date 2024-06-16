@@ -18,7 +18,7 @@
                 @include('project.usecases.get_tests')
             </div>
         </div>
-        <div class="col">
+        <div class="col bg-response-body">
             <h1 class="fw-bold">Response <span id="response_status_code"></span> <span id="response_time"></span></h1>
             <div id="response_box"></div>
         </div>

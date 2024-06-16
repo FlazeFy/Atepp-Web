@@ -277,6 +277,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response, textStatus, jqXHR) {
+                $(`#add_socmed_modal`).modal('hide')
                 Swal.fire({
                     title: "Success!",
                     text: "Your social media is updated",

@@ -176,15 +176,15 @@
                             const resultHolder = holderBox.find('.test-result-holder').eq(0)
                             resultHolder.append(`
                                 <div class="alert alert-${status_test == "Passed" ? "success":"danger"}" role="alert">
-                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} ${status_test} with detail : </h6>
+                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} <span class="test-result-status">${status_test}</span> with detail : </h6>
                                     <div class="row mt-2">
                                         <div class="col-6">
                                             <h6 class="fw-bold">Expect</h6>
-                                            <a>${el.testParam} ${el.testVal} ms</a><br>
+                                            <a class="test-result-name">Response Time ${el.testParam} ${el.testVal} ms</a><br>
                                         </div>
                                         <div class="col-6">
                                             <h6 class="fw-bold">Result</h6>
-                                            <a>${timeTaken.toFixed(2)} ms</a>
+                                            <a class="test-result-expected">${timeTaken.toFixed(2)} ms</a>
                                         </div>
                                     </div>
                                 </div>
@@ -199,15 +199,15 @@
                             const resultHolder = holderBox.find('.test-result-holder').eq(0)
                             resultHolder.append(`
                                 <div class="alert alert-${status_test == "Passed" ? "success":"danger"}" role="alert">
-                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} ${status_test} with detail : </h6>
+                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} <span class="test-result-status">${status_test}</span> with detail : </h6>
                                     <div class="row mt-2">
                                         <div class="col-6">
                                             <h6 class="fw-bold">Expect</h6>
-                                            <a>${el.testVal}</a><br>
+                                            <a class="test-result-name">Response Status ${el.testVal}</a><br>
                                         </div>
                                         <div class="col-6">
                                             <h6 class="fw-bold">Result</h6>
-                                            <a>${status}</a>
+                                            <a class="test-result-expected">${status}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -224,22 +224,21 @@
                             const resultHolder = holderBox.find('.test-result-holder').eq(0)
                             resultHolder.append(`
                                 <div class="alert alert-${status_test == "Passed" ? "success":"danger"}" role="alert">
-                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} ${status_test} with detail : </h6>
+                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} <span class="test-result-status">${status_test}</span> with detail : </h6>
                                     <div class="row mt-2">
                                         <div class="col-6">
                                             <h6 class="fw-bold">Expect</h6>
-                                            <a>Key ${el.testVal} in object</a><br>
+                                            <a class="test-result-name">Key ${el.testVal} in object</a><br>
                                         </div>
                                         <div class="col-6">
                                             <h6 class="fw-bold">Result</h6>
-                                            <a>${validate_key}</a>
+                                            <a class="test-result-expected">${validate_key}</a>
                                         </div>
                                     </div>
                                 </div>
                             `)
                         } else if(el.type == "4"){
                             let status_test = "Failed"
-                            alert(el.testParam)
                             let validate_key = checkKeyValueInJson(JSON.stringify(response), el.testParam, el.testVal)
 
                             if(validate_key == true){
@@ -251,15 +250,15 @@
                             const resultHolder = holderBox.find('.test-result-holder').eq(0)
                             resultHolder.append(`
                                 <div class="alert alert-${status_test == "Passed" ? "success":"danger"}" role="alert">
-                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} ${status_test} with detail : </h6>
+                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} <span class="test-result-status">${status_test}</span> with detail : </h6>
                                     <div class="row mt-2">
                                         <div class="col-6">
                                             <h6 class="fw-bold">Expect</h6>
-                                            <a>Key ${el.testVal} in object</a><br>
+                                            <a class="test-result-name">Key ${el.testVal} in object</a><br>
                                         </div>
                                         <div class="col-6">
                                             <h6 class="fw-bold">Result</h6>
-                                            <a>${validate_key}</a>
+                                            <a class="test-result-expected">${validate_key}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -276,21 +275,27 @@
                             const resultHolder = holderBox.find('.test-result-holder').eq(0)
                             resultHolder.append(`
                                 <div class="alert alert-${status_test == "Passed" ? "success":"danger"}" role="alert">
-                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} ${status_test} with detail : </h6>
+                                    <h6>${status_test == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} <span class="test-result-status">${status_test}</span> with detail : </h6>
                                     <div class="row mt-2">
                                         <div class="col-6">
                                             <h6 class="fw-bold">Expect</h6>
-                                            <a>Key ${el.testParam} have one of ${el.testVal}</a><br>
+                                            <a class="test-result-name">Key ${el.testParam} have one of ${el.testVal}</a><br>
                                         </div>
                                         <div class="col-6">
                                             <h6 class="fw-bold">Result</h6>
-                                            <a>${validate_key}</a>
+                                            <a class="test-result-expected">${validate_key}</a>
                                         </div>
                                     </div>
                                 </div>
                             `)
                         }
                     });
+
+                    $('#test_holder').append(`
+                        <span id="save_test_btn_holder">
+                            <a class="w-100 btn btn-primary mt-1 py-3 px-4" onclick="post_test()"><i class="fa-solid fa-floppy-disk"></i> Save Test</a>
+                        </span>
+                    `)
                 }
                 
                 // Environment
@@ -369,6 +374,50 @@
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
                 // Do someting
+            }
+        })
+    }
+    function post_test(){
+        const id = $('#endpoint_id').val()
+        let test_collection = []
+        $('.test-result-holder').each(function() {
+            test_collection.push({
+                test_name: $(this).find('.test-result-name').text(),
+                test_expected: $(this).find('.test-result-expected').text(),
+                test_result: $(this).find('.test-result-status').text(),
+                test_notes: 'test',
+            });
+        });
+
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/v1/project/endpoint/test/${id}`,
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                test_collection:test_collection
+            }), 
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response, textStatus, jqXHR) {
+                $('#save_test_btn_holder').empty().append(`<a class='text-success'>Test result is saved!</a>`)
+                Swal.fire({
+                    title: "Success!",
+                    text: "Test result is saved",
+                    icon: "success"
+                });
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to save test!",
+                });
             }
         })
     }

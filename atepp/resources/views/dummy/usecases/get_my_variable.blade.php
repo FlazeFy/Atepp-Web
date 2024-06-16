@@ -99,6 +99,11 @@
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {
                 // Do someting
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to get variable!",
+                });
             });
     }
 
@@ -138,8 +143,19 @@
             },
             success: function(response) {
                 get_my_variable()
+                Swal.fire({
+                    title: "Success!",
+                    text: "New variable is added",
+                    icon: "success"
+                });
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to add variable!",
+                });
+
                 var errorMessage = "Unknown error occurred"
                 var allMsg = null
                 var icon = `<i class='fa-solid fa-triangle-exclamation'></i> `
@@ -166,7 +182,7 @@
 
     function edit_variable(idx){
         const id = $(`#id_${idx}`).val()
-        $(`#all_msg_var_${i}`).empty()
+        $(`#all_msg_var_${idx}`).empty()
         $.ajax({
             url: `http://127.0.0.1:8000/api/v1/dictionary/variable/${id}`,
             type: 'PUT',
@@ -179,8 +195,19 @@
             success: function(response) {
                 $(`#manage_var_${idx}_modal`).modal('hide')
                 get_my_variable()
+                Swal.fire({
+                    title: "Success!",
+                    text: "Variable is updated",
+                    icon: "success"
+                });
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to update variable!",
+                });
+
                 var errorMessage = "Unknown error occurred"
                 var allMsg = null
                 var icon = `<i class='fa-solid fa-triangle-exclamation'></i> `
@@ -217,8 +244,19 @@
             success: function(response) {
                 $(`#manage_var_${idx}_modal`).modal('hide')
                 get_my_variable()
+                Swal.fire({
+                    title: "Success!",
+                    text: "Variable is deleted",
+                    icon: "success"
+                });
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to delete variable!",
+                });
+
                 var errorMessage = "Unknown error occurred"
                 var allMsg = null
                 var icon = `<i class='fa-solid fa-triangle-exclamation'></i> `

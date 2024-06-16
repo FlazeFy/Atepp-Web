@@ -28,6 +28,8 @@ use App\Http\Controllers\Api\User\Commands as CommandsUserApi;
 
 use App\Http\Controllers\Api\Bot\Queries as QueriesBotApi;
 
+use App\Http\Controllers\Api\Test\Commands as CommandsTestApi;
+
 ######################### Public Route #########################
 
 Route::post('/v1/login', [CommandAuthApi::class, 'login']);
@@ -48,6 +50,7 @@ Route::prefix('/v1/project')->middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/endpoint/check', [CommandsEndpointApi::class, 'check_endpoint']);
     Route::post('/endpoint', [CommandsEndpointApi::class, 'post_endpoint']);
+    Route::post('/endpoint/test/{id}', [CommandsTestApi::class, 'post_test']);
 
     Route::get('/folder/{slug}', [QueriesFolderApi::class, 'get_folder_by_project_slug']);
     Route::post('/folder/{slug}', [CommandsFolderApi::class, 'post_folder']);
