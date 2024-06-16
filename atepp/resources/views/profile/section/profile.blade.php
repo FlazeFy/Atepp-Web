@@ -142,16 +142,17 @@
                                 </div>
                                 <div class="modal-body">
                                     <label for="exampleInputEmail1" class="form-label text-white">Platform</label>
-                                    <select class="form-select mb-3" aria-label="Default select example">
+                                    <select class="form-select mb-3" aria-label="Default select example" id="social_media_platform">
                                         <option selected>- Select Social Media-</option>
                                         <option value="instagram">Instagram</option>
                                         <option value="github">Github</option>
                                     </select>
                                     <label for="basic-url" class="form-label">Account URL</label>
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon3">-</span>
-                                        <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                                        <span class="input-group-text" id="base_url_platform">-</span>
+                                        <input type="text" class="form-control" id="socmed_account" aria-describedby="basic-addon3">
                                     </div>
+                                    <div id="btn-submit-socmed-holder"></div>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +160,11 @@
                 `)
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {
-                // Do someting
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to get my profile!",
+                });
             });
     }
 
@@ -193,6 +198,30 @@
                 $("#btn-edit-profile-holder").empty()
             }
         })
+        $('#social_media_holder').on('change', '#social_media_platform', function() {
+            const val = $('#social_media_platform').val()
+            if(val == 'github'){
+                $('#base_url_platform').text('https://github.com/')
+            } else if(val == 'instagram'){
+                $('#base_url_platform').text('https://www.instagram.com/')
+            } else {
+                $('#btn-submit-socmed-holder').empty()
+                $('#base_url_platform').text('-')
+                $('#socmed_account').val(null)
+            }
+        });
+        $('#social_media_holder').on('input','#socmed_account', function() {
+            const val = $(this).val()
+            const val_platform = $('#base_url_platform').text()
+
+            if(val.length != 0 && val_platform != '-' && val_platform != null){
+                $('#btn-submit-socmed-holder').empty().append(`
+                    <a class="btn btn-primary w-100 mt-2" onclick="post_socmed()">Add Social Media</a>
+                `)
+            } else {
+                $('#btn-submit-socmed-holder').empty()
+            }
+        })
     })
 
     function edit_profile(){
@@ -207,6 +236,11 @@
             },
             success: function(response) {
                 get_my_profile()
+                Swal.fire({
+                    title: "Success!",
+                    text: "Your profile is updated",
+                    icon: "success"
+                });
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
                 var allMsg = null
@@ -215,7 +249,48 @@
                 if(allMsg){
                     $('#all_msg').html(icon + allMsg)
                 }
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to update profile!",
+                });
             }
         });
+    }
+
+    function post_socmed(){
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/v1/user/add_socmed`,
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({ 
+                socmed_name: $('#social_media_platform').val(),
+                socmed_url: `${$('#base_url_platform').text()}${$('#socmed_account').val()}`
+            }), 
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json")
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>")
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response, textStatus, jqXHR) {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Your social media is updated",
+                    icon: "success"
+                });
+                get_my_profile()
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to update social media!",
+                });
+            }
+        })
     }
 </script>

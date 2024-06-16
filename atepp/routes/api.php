@@ -90,4 +90,5 @@ Route::prefix('/v1/user')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/service', [QueriesBotApi::class, 'get_my_service']);
 
     Route::put('/edit_profile', [CommandsUserApi::class, 'edit_profile']);
+    Route::post('/add_socmed', [CommandsUserApi::class, 'add_socmed_profile']);
 });
