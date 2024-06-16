@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 use App\Models\TestModel;
+use App\Models\BotModel;
 
 use App\Helpers\Generator;
 use App\Helpers\Converter;
@@ -18,8 +19,10 @@ class Commands extends Controller
     {
         try{
             $user_id = $request->user()->id;
+            $bots = BotModel::get_user_bots($user_id);
             $test_collection = $request->test_collection;
             $i = 0;
+            $msg_format = "";
 
             foreach($test_collection as $dt){
                 $res = TestModel::create([
@@ -35,12 +38,25 @@ class Commands extends Controller
 
                 if($res != null){
                     $i++;
+
+                    $msg_format .= "Test Name : ".$dt['test_name']."\nExpected : ".$dt['test_expected']."\nResult : ".$dt['test_result']."\nNotes : ".$dt['test_notes'];
+                }
+                $msg_format .= "\nAt ".date('Y-m-d H:i:s')."\n\n";
+            }
+
+            if($bots && $i > 0){
+                foreach($bots as $dt){
+                    $response = Telegram::sendMessage([
+                        'chat_id' => $dt->bot_id,
+                        'text' => "Hello $dt->username, An Endpoint has been tested with url $request->endpoint_url\n\n<b>Here's the detail :</b>\n\n$msg_format",
+                        'parse_mode' => 'HTML'
+                    ]);
                 }
             }
             
             return response()->json([
                 'status' => 'success',
-                'message' => "test created $i/".count($test_collection)
+                'message' => "Test Saved $i/".count($test_collection)
             ], Response::HTTP_OK);
         } catch(\Exception $e) {
             return response()->json([

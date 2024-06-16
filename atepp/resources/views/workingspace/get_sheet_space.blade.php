@@ -270,7 +270,30 @@
                             </td>
                             <td class="cell">-</td>
                             <td class="cell">-</td>
-                            <td><button class="btn btn-primary w-100"><i class="fa-solid fa-circle-info"></i></button></td>
+                            <td>
+                                <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#endpointInfo-${data[i].endpoint_id}-modal" onclick="get_test('${data[i].endpoint_id}')"><i class="fa-solid fa-circle-info"></i></button>
+                                <div class="modal fade" id="endpointInfo-${data[i].endpoint_id}-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Endpoint Info</h5>
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-circle-xmark"></i></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-lg-7">
+                                                        <h5>Test History</h5>
+                                                        <div id="test-result-holder-${data[i].endpoint_id}"></div>
+                                                    </div>
+                                                    <div class="col-lg-5">
+                                                    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                             <td><button class="btn btn-primary w-100"><i class="fa-solid fa-gear"></i></button></td>
                         </tr>
                     `)
@@ -319,6 +342,64 @@
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {
                 // Do someting
+            });
+    }
+
+    function get_test(endpoint_id) {
+        $(`#test-result-holder-${endpoint_id}`).empty()
+        $.ajax({
+                url: `http://127.0.0.1:8000/api/v1/project/endpoint/test/${endpoint_id}`,
+                datatype: "json",
+                type: "get",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Accept", "application/json")
+                    xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>")
+                }
+            })
+            .done(function (response) {
+                let data =  response.data.data
+
+                if(data.length > 0){
+                    let date_before = ''
+                    for(var i = 0; i < data.length; i++){
+                        if(date_before == "" || date_before != get_date_to_context(data[i].created_at,'date')){
+                            $(`#test-result-holder-${endpoint_id}`).append(`
+                                <h6>${date_before}</h6>
+                            `)
+                            date_before == get_date_to_context(data[i].created_at,'date')
+                        }   
+
+                        $(`#test-result-holder-${endpoint_id}`).append(`
+                            <div class="alert alert-${data[i].test_result == "Passed" ? "success":"danger"}" role="alert">
+                                <h6>${data[i].test_result == "Passed" ? `<i class="fa-solid fa-check"></i>`:`<i class="fa-solid fa-xmark"></i>`} <span class="test-result-status">${data[i].test_result}</span> with detail : </h6>
+                                <div class="row mt-2 mb-1">
+                                    <div class="col-6">
+                                        <h6 class="fw-bold">Expect</h6>
+                                        <a class="test-result-name">${data[i].test_name}</a><br>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="fw-bold">Result</h6>
+                                        <a class="test-result-expected">${data[i].test_expected}</a>
+                                    </div>
+                                </div>
+                                <a class="fst-italic" style="font-size: var(--textXMD);"><b>@${data[i].created_by}</b> at ${get_date_to_context(data[i].created_at, 'calendar')}</a>
+                            </div>
+                        `)
+                    }
+                } else {
+                    $(`#test-result-holder-${endpoint_id}`).append(`
+                        <div class="alert alert-danger text-center" role="alert">
+                            <h6>No Test Detected!</h6>
+                        </div>
+                    `)
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to get test!",
+                });
             });
     }
 

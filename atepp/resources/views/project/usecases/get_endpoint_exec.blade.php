@@ -395,20 +395,23 @@
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify({
-                test_collection:test_collection
+                test_collection: test_collection,
+                endpoint_url: $('#endpoint_holder').val()
             }), 
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>");
+                xhr.setRequestHeader("Accept", "application/json")
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>")
+                Swal.showLoading()	
             },
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response, textStatus, jqXHR) {
-                $('#save_test_btn_holder').empty().append(`<a class='text-success'>Test result is saved!</a>`)
+                Swal.hideLoading()	
+                $('#save_test_btn_holder').empty().append(`<a class='text-success fw-bold' style="font-size:var(--textLG);">${response.message}</a>`)
                 Swal.fire({
                     title: "Success!",
-                    text: "Test result is saved",
+                    text: response.message,
                     icon: "success"
                 });
             },
