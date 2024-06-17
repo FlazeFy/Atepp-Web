@@ -31,7 +31,7 @@ class Commands extends Controller
             $bots = BotModel::get_user_bots($user_id);
     
             $time = time();
-            $datetime = date("Y-m-d H:i:s");
+            $datetime = date("Y-m-d_H:i:s");
     
             $options = new DompdfOptions();
             $options->set('defaultFont', 'Courier');

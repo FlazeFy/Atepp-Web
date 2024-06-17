@@ -2,7 +2,7 @@
 <table class="table position-relative text-white table-bordered border-white">
     <thead class="text-center">
         <tr>
-            <th scope="col">Service Platforn</th>
+            <th scope="col">Service Platform</th>
             <th scope="col">ID</th>
             <th scope="col">Created At</th>
             <th scope="col">Validation Status</th>
@@ -41,7 +41,11 @@
                 }
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {
-                // Do someting
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to get service!",
+                });
             });
     }
 </script>

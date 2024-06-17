@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\Test\Commands as CommandsTestApi;
 use App\Http\Controllers\Api\Test\Queries as QueriesTestApi;
 
 use App\Http\Controllers\Api\Docs\Commands as CommandsDocsApi;
+use App\Http\Controllers\Api\Docs\Queries as QueriesDocsApi;
 
 ######################### Public Route #########################
 
@@ -103,4 +104,6 @@ Route::prefix('/v1/user')->middleware(['auth:sanctum'])->group(function () {
 
 Route::prefix('/v1/docs')->middleware(['auth:sanctum'])->group(function () {
     Route::post('/endpoint', [CommandsDocsApi::class, 'generate_endpoint_run']);
+
+    Route::get('/warehouse', [QueriesDocsApi::class, 'get_my_warehouse']);
 });
