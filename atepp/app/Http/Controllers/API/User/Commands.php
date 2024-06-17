@@ -104,4 +104,46 @@ class Commands extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function delete_socmed_profile(Request $request, $idx) 
+    {
+        try{
+            $user_id = $request->user()->id;
+            
+            $check = UserModel::find($user_id);
+
+            if($check != null){
+                $socmed = $check->social_media;
+
+                array_splice($socmed, $idx, 1);
+
+                $res = UserModel::where('id',$user_id)
+                    ->update([
+                        'social_media' => $socmed,
+                    ]);
+
+                if($res > 0){
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'user socmed deleted',
+                    ], Response::HTTP_OK);
+                } else {
+                    return response()->json([
+                        'status' => 'failed',
+                        'message' => 'user socmed failed deleted',
+                    ], Response::HTTP_NOT_FOUND);
+                }
+            } else {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'account not found',
+                ], Response::HTTP_NOT_FOUND);
+            }
+        } catch(\Exception $e) {
+            return response()->json([
+                'status' => $e->getMessage(),
+                'message' => 'something wrong. Please contact admin',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

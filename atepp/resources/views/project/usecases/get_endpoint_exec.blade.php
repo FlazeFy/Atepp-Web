@@ -416,6 +416,7 @@
                 });
             },
             error: function(response, jqXHR, textStatus, errorThrown) {
+                Swal.showLoading()	
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",

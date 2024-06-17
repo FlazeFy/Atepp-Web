@@ -123,7 +123,7 @@
                                                     el.socmed_name == "instagram" ? el.socmed_url.replace("https://www.instagram.com/","") : ""
                                                 }" aria-describedby="basic-addon3">
                                             </div>
-                                            <a class="btn btn-danger w-100 mt-3"><i class="fa-solid fa-trash"></i> Remove</a>
+                                            <a class="btn btn-danger w-100 mt-3" onclick="delete_socmed('${idx}')"><i class="fa-solid fa-trash"></i> Remove</a>
                                         </div>
                                     </div>
                                 </div>
@@ -290,6 +290,46 @@
                     icon: "error",
                     title: "Oops...",
                     text: "Failed to update social media!",
+                });
+            }
+        })
+    }
+
+    function delete_socmed(idx){
+        $.ajax({
+            url: `http://127.0.0.1:8000/api/v1/user/delete_socmed_idx/${idx}`,
+            type: 'DELETE',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({ 
+                socmed_name: $('#social_media_platform').val(),
+                socmed_url: `${$('#base_url_platform').text()}${$('#socmed_account').val()}`
+            }), 
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Accept", "application/json")
+                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>")
+                Swal.showLoading()	
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response, textStatus, jqXHR) {
+                $(`#socmed_${idx}_edit_modal`).modal('hide')
+                Swal.hideLoading()	
+                Swal.fire({
+                    title: "Success!",
+                    text: "Your social media is deleted",
+                    icon: "success"
+                });
+                get_my_profile()
+            },
+            error: function(response, jqXHR, textStatus, errorThrown) {
+                $(`#socmed_${idx}_edit_modal`).modal('hide')
+                Swal.showLoading()	
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to delete social media!",
                 });
             }
         })
