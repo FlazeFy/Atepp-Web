@@ -31,6 +31,8 @@ use App\Http\Controllers\Api\Bot\Queries as QueriesBotApi;
 use App\Http\Controllers\Api\Test\Commands as CommandsTestApi;
 use App\Http\Controllers\Api\Test\Queries as QueriesTestApi;
 
+use App\Http\Controllers\Api\Docs\Commands as CommandsDocsApi;
+
 ######################### Public Route #########################
 
 Route::post('/v1/login', [CommandAuthApi::class, 'login']);
@@ -97,4 +99,8 @@ Route::prefix('/v1/user')->middleware(['auth:sanctum'])->group(function () {
     Route::put('/edit_profile', [CommandsUserApi::class, 'edit_profile']);
     Route::post('/add_socmed', [CommandsUserApi::class, 'add_socmed_profile']);
     Route::delete('/delete_socmed_idx/{idx}', [CommandsUserApi::class, 'delete_socmed_profile']);
+});
+
+Route::prefix('/v1/docs')->middleware(['auth:sanctum'])->group(function () {
+    Route::post('/endpoint', [CommandsDocsApi::class, 'generate_endpoint_run']);
 });

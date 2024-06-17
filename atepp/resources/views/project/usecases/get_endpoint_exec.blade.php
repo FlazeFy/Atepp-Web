@@ -60,10 +60,10 @@
         const url = document.getElementById('endpoint_holder').value
 
         if(type == 'send'){
-            send_endpoint(url, method)
+            send_endpoint(url, method, type)
         }
     }
-    function send_endpoint(url, method){
+    function send_endpoint(url, method, typeExec){
         const response_box = document.getElementById('response_box')
         const status_code_box = document.getElementById('response_status_code')
         const time_box = document.getElementById('response_time')
@@ -76,7 +76,9 @@
 
         const startTime = performance.now()
 
-       
+        // Doc config
+        let is_with_endpoint_info = false
+        let is_test = false
 
         $.ajax({
             url: url,
@@ -297,6 +299,80 @@
                         </span>
                     `)
                 }
+
+                let element_doc = `
+                        <div class="text-start">
+                            <div>
+                                <input type="checkbox" id="checkbox1" value="1">
+                                <label for="checkbox1">Endpoint Detail & Response</label>
+                            </div>`
+
+                if ($('#test_holder').children().length > 0) {
+                    element_doc += `<div>
+                            <input type="checkbox" id="checkbox2" value="2">
+                            <label for="checkbox2">Test Case</label>
+                        </div>`
+                }
+                        
+                element_doc += '</div>'
+
+                Swal.fire({
+                    title: "Document Format",
+                    html: element_doc,
+                    preConfirm: () => {
+                        let checkbox1 = null
+                        let checkbox2 = null
+
+                        heckbox1 = Swal.getPopup().querySelector('#checkbox1').checked
+                        if ($('#test_holder').children().length > 0) {
+                            checkbox2 = Swal.getPopup().querySelector('#checkbox2').checked
+                        }
+
+                        return { checkbox1, checkbox2 }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const content_docs = {
+                            endpoint_url: url,
+                            endpoint_method: method,
+                            endpoint_response_body: response,
+                            endpoint_status_code: status,
+                            time_taken: timeTaken.toFixed(2)+' ms'
+                        }
+
+                        Swal.showLoading()	
+                        $.ajax({
+                            url: `http://127.0.0.1:8000/api/v1/docs/endpoint`,
+                            type: 'POST',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: JSON.stringify({content:content_docs}), 
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("Accept", "application/json")
+                                xhr.setRequestHeader("Authorization", "Bearer <?= session()->get("token_key"); ?>")
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response, textStatus, jqXHR) {
+                                Swal.hideLoading()	
+                                Swal.fire({
+                                    title: "Success!",
+                                    text: response.message,
+                                    icon: "success"
+                                });
+                            },
+                            error: function(response, jqXHR, textStatus, errorThrown) {
+                                Swal.hideLoading()	
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Failed to generate docs!",
+                                });
+                            }
+                        })
+                    }
+                });
                 
                 // Environment
                 const env = navigator.userAgent
